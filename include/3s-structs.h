@@ -3,6 +3,8 @@
 
 #include <stdlib.h>
 
+#define VALUE_NOT_FOUND -1
+
 /* General type of the values on the
  * trees and linked lists.
  * */
@@ -35,6 +37,8 @@ struct linkedlist {
 
     /* Add a new value to the list. */
     void (*add) (struct linkedlist* this, value_t value);
+    /* Returns the first index of the value on this list. */
+    int (*index) (struct linkedlist* this, value_t value);
 };
 
 
