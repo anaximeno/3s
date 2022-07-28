@@ -64,4 +64,11 @@ extern l_list* new_list(void);
 /* Returns a pointer new allocated binary tree. */
 extern b_tree* new_btree(void);
 
+
+/* Used to free the allocated memory of a linkedlist structure. */
+extern void free_list(l_list** list);
+
+/* Used to free the allocated memory of a binary tree structure. */
+extern void free_btree(b_tree** tree);
+
 #endif /* 3S_STRUCTS_HEADER */

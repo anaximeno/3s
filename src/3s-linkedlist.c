@@ -112,6 +112,7 @@ extern l_list* new_list(void)
         list->head = NULL;
         list->tail = NULL;
         list->length = 0;
+
         list->add = &add_to_linked_list;
         list->index = &get_index_of_value;
         list->get = &get_value_at_index;
@@ -119,4 +120,19 @@ extern l_list* new_list(void)
         return list;
     } else /* The allocation could not be made. */
         return NULL;
+}
+
+static void free_node(_l_node* node) {
+    if ((*node)->next != NULL)
+        free_node(&(*node)->next);
+
+    free(*node);
+    *node = NULL;
+}
+
+extern void free_list(l_list** list)
+{
+    free_node(&(*list)->head);
+    free(*list);
+    *list = NULL;
 }
