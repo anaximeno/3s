@@ -1,6 +1,8 @@
-#include "../include/3s-structs.h"
+#include "../include/core.h"
+#include "../include/llist.h"
 
 #include <stdlib.h>
+
 
 typedef struct _linked_node* _l_node;
 
@@ -21,17 +23,17 @@ static _l_node new_linked_node(void)
 
 
 /* Used to add a new value to the linked list. */
-static void add_to_linked_list(l_list* this, value_t value)
+static void add_to_linked_list(l_list* self, value_t value)
 {
-    if (this != NULL) {
-        if (this->head == NULL) {
+    if (self != NULL) {
+        if (self->head == NULL) {
             _l_node head = new_linked_node();
 
             if (head != NULL) {
                 head->value = value;
-                this->head = head;
-                this->tail = head;
-                this->length = 1;
+                self->head = head;
+                self->tail = head;
+                self->length = 1;
             }
         } else {
             _l_node next = new_linked_node();
@@ -39,10 +41,10 @@ static void add_to_linked_list(l_list* this, value_t value)
             if (next != NULL) {
                 next->value = value;
                 next->next = NULL;
-                next->prev = this->tail;
-                this->tail->next = next;
-                this->tail = this->tail->next;
-                this->length += 1;
+                next->prev = self->tail;
+                self->tail->next = next;
+                self->tail = self->tail->next;
+                self->length += 1;
             }
         }
     }
@@ -53,12 +55,12 @@ static void add_to_linked_list(l_list* this, value_t value)
  * If the value was not found the constant `VALUE_NOT_FOUND` is
  * returned instead.
  * */
-static int get_index_of_value(l_list* this, value_t value)
+static int get_index_of_value(l_list* self, value_t value)
 {
     _l_node node = NULL;
     unsigned idx = 0;
 
-    for (node = this->head ; node != NULL ; node = node->next, ++idx)
+    for (node = self->head ; node != NULL ; node = node->next, ++idx)
         if (node->value == value)
             return idx;
 
@@ -69,27 +71,27 @@ static int get_index_of_value(l_list* this, value_t value)
 /* Returns the value at the given index. Zero will be returned
  * by default for out of bound indexes.
  * */
-static value_t get_value_at_index(l_list* this, unsigned idx)
+static value_t get_value_at_index(l_list* self, unsigned idx)
 {
 #define DEFAULT_RETURN_TYPE 0
 
-    if (this != NULL && idx < this->length) {
+    if (self != NULL && idx < self->length) {
         _l_node node = NULL;
         unsigned int i = 0;
-        float mid_idx = (float) this->length / 2;
+        float mid_idx = (float) self->length / 2;
 
         if (idx < mid_idx) {
             /* Forward search */
             i = 0;
-            node = this->head;
+            node = self->head;
             while (i < idx && node != NULL) {
                 node = node->next;
                 i += 1;
             }
         } else {
             /* Backward search */
-            i = this->length - 1;
-            node = this->tail;
+            i = self->length - 1;
+            node = self->tail;
             while (i > idx && node != NULL) {
                 node = node->prev;
                 i -= 1;
