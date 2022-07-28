@@ -11,9 +11,10 @@
 typedef int value_t;
 
 
-/* Represents a unique node of the linked lists. */
+/* Represents a unique node of the doubly-linked list. */
 struct _linked_node {
     struct _linked_node* next;
+    struct _linked_node* prev;
     value_t value;
 };
 
@@ -39,6 +40,9 @@ struct linkedlist {
     void (*add) (struct linkedlist* this, value_t value);
     /* Returns the first index of the value on this list. */
     int (*index) (struct linkedlist* this, value_t value);
+    /* Returns the value at the given index. Zero will be returned
+     * by default for out of bound indexes. */
+    value_t (*get) (struct linkedlist* this, unsigned index);
 };
 
 
