@@ -34,6 +34,7 @@ struct linkedlist {
     void (*remove_at_index) (l_list* self, unsigned index);
     /* Removes all occorences of the value on the list. */
     void (*remove_all) (l_list* self, value_t value);
+    /* Prints the list. */
     void (*print) (l_list* self);
 };
 

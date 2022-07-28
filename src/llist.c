@@ -180,6 +180,7 @@ void print_list(l_list* self)
 }
 
 
+/* Allocates and returns a new linked list, if possible. */
 extern l_list* new_list(void)
 {
     l_list* list = (l_list*) malloc(sizeof(l_list));
@@ -202,7 +203,10 @@ extern l_list* new_list(void)
         return NULL;
 }
 
-static void free_node(_l_node* node) {
+
+/* Used to free the nodes of a linked list recursivelly. */
+static void free_node(_l_node* node)
+{
     if (*node != NULL) {
         if ((*node)->next != NULL)
             free_node(&(*node)->next);
@@ -212,6 +216,8 @@ static void free_node(_l_node* node) {
     }
 }
 
+
+/* Used to free the linked list and its nodes. */
 extern void free_list(l_list** list)
 {
     if (*list != NULL) {
