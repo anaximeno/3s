@@ -30,6 +30,11 @@ struct linkedlist {
     /* Returns the value at the given index. Zero will be returned
      * by default for out of bound indexes. */
     value_t (*get) (l_list* self, unsigned index);
+    /* Removed a value at the given index. */
+    void (*remove_at_index) (l_list* self, unsigned index);
+    /* Removes all occorences of the value on the list. */
+    void (*remove_all) (l_list* self, value_t value);
+    void (*print) (l_list* self);
 };
 
 

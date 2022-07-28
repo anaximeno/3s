@@ -6,6 +6,6 @@
 /* General type of the values on the
  * trees and linked lists.
  * */
-typedef void* value_t;
+typedef int value_t;
 
 #endif /* _3S_CORE_HEADER */
