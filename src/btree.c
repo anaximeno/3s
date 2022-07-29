@@ -24,32 +24,35 @@ static _b_node new_b_node(void)
 }
 
 static void insert_value_in_btree(_b_node* root, value_t value, b_node_pos pos,
-                                        _b_node* parent, b_node_rep_st rep_strat)
+                                        _b_node parent, b_node_rep_st rep_strategy)
 {
     if (*root == NULL) {
         _b_node node = new_b_node();
-        
+
         if (node != NULL) {
             node->parent = parent;
             node->relative_positioning = pos;
             node->value = value;
             node->level = parent != NULL ? parent->level + 1 : 0;
         }
+
+        *root = node;
     } else {
         const value_t r_val = (*root)->value;
-        if (r_val < value || (r_val == value && rep_strat == APPEND_LEFT))
-            insert_value_in_btree(&(*root)->left, LEFT, *root, rep_strat);
-        else if (r_val > value || (r_val == value && rep_strat == APPEND_RIGTH))
-            insert_value_in_btree(&(*root)->right, RIGTH, *root, rep_strat);
+        if (r_val < value || (r_val == value && rep_strategy == APPEND_LEFT))
+            insert_value_in_btree(&(*root)->left, value, LEFT, *root, rep_strategy);
+        else if (r_val > value || (r_val == value && rep_strategy == APPEND_RIGHT))
+            insert_value_in_btree(&(*root)->right, value, RIGTH, *root, rep_strategy);
         else
-            /* Repeated value, and rep_strat is IGNORE. */
+            /* Repeated value, and rep_strategy is IGNORE. */
+        ;
     }
 }
 
 
 static void add_value_to_b_tree(b_tree* self, value_t value)
 {
-    insert_value_in_btree(&self->root, value, ROOT, NULL, self->repetition_strat);
+    insert_value_in_btree(&self->root, value, ROOT, NULL, self->rep_strategy);
 }
 
 
@@ -59,7 +62,7 @@ extern b_tree* new_btree(b_node_rep_st rep_strategy)
 
     if (tree != NULL) {
         tree->root = NULL;
-        tree->repetition_strat = rep_strategy;
+        tree->rep_strategy = rep_strategy;
         tree->add = &add_value_to_b_tree;
     }
 

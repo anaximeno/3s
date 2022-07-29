@@ -39,7 +39,7 @@ struct _binary_node {
 /* Represents the binary tree as a whole. */
 struct binarytree {
     struct _binary_node* root;
-    b_node_rep_st repetition_strat;
+    b_node_rep_st rep_strategy;
     unsigned depth;
 
     void (*add) (b_tree* self, value_t value);
