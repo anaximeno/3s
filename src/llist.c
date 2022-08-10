@@ -109,7 +109,8 @@ static _l_node get_node_at_index(l_list* list, unsigned index)
         }
 
 #ifdef _MAKE_ROBUST_CHECK
-        assert(i == index && node != NULL);
+        assert(i == index);
+        assert(node != NULL);
 #endif
 
         return node;
@@ -124,6 +125,10 @@ static _l_node get_node_at_index(l_list* list, unsigned index)
  * */
 static value_t get_value_at_index(l_list* self, unsigned idx)
 {
+#ifdef _MAKE_ROBUST_CHECK
+    assert(idx >= 0);
+#endif
+
 #define DEFAULT_RETURN_TYPE 0
 
     if (self != NULL && idx < self->length) {
@@ -140,6 +145,11 @@ static value_t get_value_at_index(l_list* self, unsigned idx)
 /* Removes the value at the given index. */
 static void remove_at_index(l_list* self, unsigned index)
 {
+#ifdef _MAKE_ROBUST_CHECK
+    assert(index >= 0);
+    assert(self->length >= 0); // invariant
+#endif
+
     if (self != NULL && index < self->length) {
         _l_node node = get_node_at_index(self, index);
 
@@ -162,6 +172,11 @@ static void remove_at_index(l_list* self, unsigned index)
             node = NULL;
             self->length -= 1;
         }
+
+#ifdef _MAKE_ROBUST_CHECK
+        assert(self->length >= 0); // invariant
+        assert(node == NULL);
+#endif
     }
 }
 
@@ -173,6 +188,9 @@ static void remove_all(l_list* self, value_t value)
     while ((index = get_index_of_value(self, value)) != VALUE_NOT_FOUND) {
         remove_at_index(self, (unsigned) index);
     }
+#ifdef _MAKE_ROBUST_CHECK
+    assert(get_index_of_value(self, value) == VALUE_NOT_FOUND);
+#endif
 }
 
 
@@ -228,6 +246,9 @@ static void free_node(_l_node* node)
         free(*node);
         *node = NULL;
     }
+#ifdef _MAKE_ROBUST_CHECK
+    assert(*node == NULL);
+#endif
 }
 
 
@@ -239,4 +260,7 @@ extern void free_list(l_list** list)
         free(*list);
         *list = NULL;
     }
+#ifdef _MAKE_ROBUST_CHECK
+    assert(*list == NULL);
+#endif
 }
