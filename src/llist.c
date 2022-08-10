@@ -5,7 +5,6 @@
 #include <stdio.h>
 #include <assert.h>
 
-#define _MAKE_ROBUST_CHECK
 
 typedef struct _linked_node* _l_node;
 
