@@ -1,15 +1,23 @@
 #ifndef _3S_CORE_HEADER
 #define _3S_CORE_HEADER
 
-#include <string.h>
-#include <stdlib.h>
-
-/* Returned if a value was not found in a search. */
+/* Returned when searching for
+ * values on lists or arrays.
+ * This is defined on the
+ * core module.
+ * */
 #define VALUE_NOT_FOUND -1
 
+/* When defined the program will
+ * run the assertions stated in some
+ * parts of the code. This is defined
+ * on the core module.
+ * */
+#define _MAKE_ROBUST_CHECK
 
 /* General type of the values on the
- * trees and linked lists.
+ * trees and linked lists. This is defined
+ * on the core module.
  * */
 typedef int value_t;
 
