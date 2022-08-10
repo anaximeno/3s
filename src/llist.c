@@ -3,7 +3,9 @@
 
 #include <stdlib.h>
 #include <stdio.h>
+#include <assert.h>
 
+#define _MAKE_ROBUST_CHECK
 
 typedef struct _linked_node* _l_node;
 
@@ -80,6 +82,10 @@ static int get_index_of_value(l_list* self, value_t value)
 /* Returns a node at the given index. */
 static _l_node get_node_at_index(l_list* list, unsigned index)
 {
+#ifdef _MAKE_ROBUST_CHECK
+    assert(index >= 0);
+#endif
+
     if (list != NULL && index < list->length) {
         _l_node node = NULL;
         unsigned int i = 0;
@@ -102,6 +108,10 @@ static _l_node get_node_at_index(l_list* list, unsigned index)
                 i -= 1;
             }
         }
+
+#ifdef _MAKE_ROBUST_CHECK
+        assert(i == index && node != NULL);
+#endif
 
         return node;
     }
