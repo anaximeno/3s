@@ -1,4 +1,4 @@
-#include "../include/btree.h" 
+#include "../include/btree.h"
 
 #include <stdlib.h>
 #include <stdio.h>
@@ -15,13 +15,14 @@ static _b_node new_b_node(void)
         node->parent = NULL;
         node->left = NULL;
         node->right = NULL;
-        node->relative_positioning = ROOT;
+        node->rel_pos = ROOT;
         node->value = 0;
         node->level = 0;
     }
 
     return node;
 }
+
 
 static void insert_value_in_btree(_b_node* root, value_t value, b_node_pos pos,
                                         _b_node parent, b_node_rep_st rep_strategy)
@@ -31,7 +32,7 @@ static void insert_value_in_btree(_b_node* root, value_t value, b_node_pos pos,
 
         if (node != NULL) {
             node->parent = parent;
-            node->relative_positioning = pos;
+            node->rel_pos = pos;
             node->value = value;
             node->level = parent != NULL ? parent->level + 1 : 0;
         }
@@ -67,4 +68,25 @@ extern b_tree* new_btree(b_node_rep_st rep_strategy)
     }
 
     return tree;
+}
+
+
+static void free_btree_node(_b_node* node)
+{
+    if (*node != NULL) {
+        free_btree_node(&(*node)->left);
+        free_btree_node(&(*node)->right);
+        free(*node);
+        *node = NULL;
+    }
+}
+
+
+extern void free_btree(b_tree** tree)
+{
+    if (*tree != NULL) {
+        free_btree_node(&(*tree)->root);
+        free(*tree);
+        *tree = NULL;
+    }
 }
