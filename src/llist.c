@@ -172,7 +172,12 @@ void print_list(l_list* self)
 {
     putchar('[');
     for (unsigned i = 0 ; i < self->length ; ++i) {
-        printf("%d", self->get(self, i));
+        // The string representation of the value
+        char* repr = VALUE_T_REPR(self->get(self, i));
+
+        printf("%s", repr);
+
+        free(repr);
         if (i != self->length - 1)
             printf(", ");
     }
