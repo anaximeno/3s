@@ -79,6 +79,12 @@ static void free_btree_node(_b_node* node)
     if (*node != NULL) {
         free_btree_node(&(*node)->left);
         free_btree_node(&(*node)->right);
+
+        if ((*node)->value != NULL) {
+            free((*node)->value);
+            (*node)->value = NULL;
+        }
+
         free(*node);
         *node = NULL;
     }
