@@ -3,6 +3,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <stdbool.h>
+#include <assert.h>
 
 typedef struct _binary_node* _b_node;
 
@@ -44,9 +45,11 @@ static void insert_value_in_btree(_b_node* root, value_t value, b_node_pos pos,
             insert_value_in_btree(&(*root)->left, value, LEFT, *root, rep_strategy);
         else if (r_val > value || (r_val == value && rep_strategy == APPEND_RIGHT))
             insert_value_in_btree(&(*root)->right, value, RIGTH, *root, rep_strategy);
-        else
-            /* Repeated value, and rep_strategy is IGNORE. */
-        ;
+        else { /* Value already inserted, and rep_strategy is IGNORE. */
+#ifdef _MAKE_ROBUST_CHECK
+            assert(rep_strategy == IGNORE);
+#endif
+        }
     }
 }
 
@@ -79,6 +82,10 @@ static void free_btree_node(_b_node* node)
         free(*node);
         *node = NULL;
     }
+
+#ifdef _MAKE_ROBUST_CHECK
+    assert(node == NULL);
+#endif
 }
 
 
@@ -89,4 +96,8 @@ extern void free_btree(b_tree** tree)
         free(*tree);
         *tree = NULL;
     }
+
+#ifdef _MAKE_ROBUST_CHECK
+    assert(*tree == NULL);
+#endif
 }
