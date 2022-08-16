@@ -120,7 +120,7 @@ static _l_node get_node_at_index(l_list* list, unsigned index)
 }
 
 
-/* Returns the value at the given index. Zero will be returned
+/* Returns the value at the given index. NULL will be returned
  * by default for out of bound indexes.
  * */
 static value_t get_value_at_index(l_list* self, unsigned idx)
@@ -129,7 +129,7 @@ static value_t get_value_at_index(l_list* self, unsigned idx)
     assert(idx >= 0);
 #endif
 
-#define DEFAULT_RETURN_TYPE 0
+#define DEFAULT_RETURN_TYPE NULL
 
     if (self != NULL && idx < self->length) {
         _l_node node = get_node_at_index(self, idx);
