@@ -3,6 +3,7 @@
 
 #include <stdlib.h>
 #include <stdio.h>
+#include <string.h>
 #include <assert.h>
 
 
@@ -193,20 +194,48 @@ static void remove_all(s3_linked_list* self, s3_value_t value)
 #endif
 }
 
+/* Returns the string representation of a list. */
+char* list_repr(s3_linked_list* self)
+{
+    const unsigned n_brackets = 2;
+    const unsigned n_commas_and_space = 2 * (self->length - 1);
+
+    size_t speculative_size = self->length * __VALUE_T_REPR_BUFFER_MAX_SIZE;
+    speculative_size += n_brackets + n_commas_and_space;
+
+    char* repr = (char*) calloc(speculative_size, sizeof(char));
+
+    if (repr != NULL) {
+        strcat(repr, "[");
+
+        for (unsigned i = 0 ; i < self->length ; ++i) {
+            const s3_value_t value = self->get(self, i);
+            char* value_repr = value->repr(value);
+
+            strcat(repr, value_repr);
+
+            if (i + 1 != self->length)
+                strcat(repr, ", ");
+
+            free(value_repr);
+        }
+
+        strcat(repr, "]");
+
+        /* Reallocates to reduce the heap mem used. */
+        repr = realloc(repr, strlen(repr) + 1);
+    }
+
+    return repr;
+}
+
 
 /* Prints a linked list. Currently it only works for int types. */
-void print_list(s3_linked_list* self)
+void display_list(s3_linked_list* self)
 {
-    putchar('[');
-    for (unsigned i = 0 ; i < self->length ; ++i) {
-        const s3_value_t value = self->get(self, i);
-
-        value->display(value);
-
-        if (i != self->length - 1)
-            printf(", ");
-    }
-    putchar(']');
+    char* repr = list_repr(self);
+    printf("%s", repr);
+    free(repr);
 }
 
 
@@ -226,7 +255,8 @@ extern s3_linked_list* new_list(void)
         list->get = &get_value_at_index;
         list->remove_at_index = &remove_at_index;
         list->remove_all = &remove_all;
-        list->print = &print_list;
+        list->display = &display_list;
+        list->repr = &list_repr;
 
         return list;
     } else /* The allocation could not be made. */

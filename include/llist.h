@@ -35,7 +35,9 @@ struct s3_linked_list {
     /* Removes all occorences of the value on the list. */
     void (*remove_all) (s3_linked_list* self, s3_value_t value);
     /* Prints the list. */
-    void (*print) (s3_linked_list* self);
+    void (*display) (s3_linked_list* self);
+    /* Returns the string representation of this list.*/
+    char* (*repr) (s3_linked_list* self);
 };
 
 
