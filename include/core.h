@@ -75,7 +75,7 @@ extern value_t new_char_value_t(char);
 extern value_t new_pointer_value_t(void*);
 
 /* When in use, a global struct named value_factory will be available. */
-#define USE_VALUE_FACTORY\
+#define CREATE_VALUE_T_FACTORY_AS(NAME)\
     const struct __value_t_factory {\
         value_t (*new_int) (int32_t);\
         value_t (*new_uint) (uint32_t);\
@@ -84,7 +84,7 @@ extern value_t new_pointer_value_t(void*);
         value_t (*new_string) (char*);\
         value_t (*new_char) (char);\
         value_t (*new_pointer) (void*);\
-    } value_t_factory = {\
+    } ##NAME = {\
         .new_int=&new_int_value_t,\
         .new_uint=&new_uint_value_t,\
         .new_float32=&new_float32_value_t,\
