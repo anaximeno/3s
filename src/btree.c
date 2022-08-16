@@ -25,7 +25,7 @@ static _b_node new_b_node(void)
 }
 
 
-static void insert_value_in_btree(_b_node* root, value_t value, b_node_pos pos,
+static void insert_value_in_btree(_b_node* root, s3_value_t value, b_node_pos pos,
                                         _b_node parent, b_node_rep_st rep_strategy)
 {
     if (*root == NULL) {
@@ -40,7 +40,7 @@ static void insert_value_in_btree(_b_node* root, value_t value, b_node_pos pos,
 
         *root = node;
     } else {
-        const value_t r_val = (*root)->value;
+        const s3_value_t r_val = (*root)->value;
         if (r_val < value || (r_val == value && rep_strategy == APPEND_LEFT))
             insert_value_in_btree(&(*root)->left, value, LEFT, *root, rep_strategy);
         else if (r_val > value || (r_val == value && rep_strategy == APPEND_RIGHT))
@@ -54,7 +54,7 @@ static void insert_value_in_btree(_b_node* root, value_t value, b_node_pos pos,
 }
 
 
-static void add_value_to_b_tree(b_tree* self, value_t value)
+static void add_value_to_b_tree(b_tree* self, s3_value_t value)
 {
     insert_value_in_btree(&self->root, value, ROOT, NULL, self->rep_strategy);
 }

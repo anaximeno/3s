@@ -25,7 +25,7 @@ static _l_node new_linked_node(void)
 
 
 /* Used to add a new value to the linked list. */
-static void add_to_linked_list(l_list* self, value_t value)
+static void add_to_linked_list(l_list* self, s3_value_t value)
 {
     if (self != NULL) {
         if (self->head == NULL) {
@@ -65,7 +65,7 @@ static void add_to_linked_list(l_list* self, value_t value)
  * If the value was not found the constant `VALUE_NOT_FOUND` is
  * returned instead.
  * */
-static int get_index_of_value(l_list* self, value_t value)
+static int get_index_of_value(l_list* self, s3_value_t value)
 {
     _l_node node = NULL;
     unsigned idx = 0;
@@ -123,7 +123,7 @@ static _l_node get_node_at_index(l_list* list, unsigned index)
 /* Returns the value at the given index. NULL will be returned
  * by default for out of bound indexes.
  * */
-static value_t get_value_at_index(l_list* self, unsigned idx)
+static s3_value_t get_value_at_index(l_list* self, unsigned idx)
 {
 #ifdef _MAKE_ROBUST_CHECK
     assert(idx >= 0);
@@ -182,7 +182,7 @@ static void remove_at_index(l_list* self, unsigned index)
 
 
 /* Completely removes the value from the list. */
-static void remove_all(l_list* self, value_t value)
+static void remove_all(l_list* self, s3_value_t value)
 {
     int index = VALUE_NOT_FOUND;
     while ((index = get_index_of_value(self, value)) != VALUE_NOT_FOUND) {
@@ -199,7 +199,7 @@ void print_list(l_list* self)
 {
     putchar('[');
     for (unsigned i = 0 ; i < self->length ; ++i) {
-        const value_t value = self->get(self, i);
+        const s3_value_t value = self->get(self, i);
 
         value->display(value);
 

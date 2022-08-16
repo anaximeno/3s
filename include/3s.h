@@ -10,5 +10,6 @@
 
 #include "./llist.h"
 #include "./btree.h"
+#include "./stack.h"
 
 #endif /* 3S_HEADER */

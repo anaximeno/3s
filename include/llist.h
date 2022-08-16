@@ -13,7 +13,7 @@ typedef struct linkedlist l_list;
 struct _linked_node {
     struct _linked_node* next;
     struct _linked_node* prev;
-    value_t value;
+    s3_value_t value;
 };
 
 
@@ -24,16 +24,16 @@ struct linkedlist {
     unsigned length;
 
     /* Add a new value to the list. */
-    void (*add) (l_list* self, value_t value);
+    void (*add) (l_list* self, s3_value_t value);
     /* Returns the first index of the value on this list. */
-    int (*index) (l_list* self, value_t value);
+    int (*index) (l_list* self, s3_value_t value);
     /* Returns the value at the given index. Zero will be returned
      * by default for out of bound indexes. */
-    value_t (*get) (l_list* self, unsigned index);
+    s3_value_t (*get) (l_list* self, unsigned index);
     /* Removed a value at the given index. */
     void (*remove_at_index) (l_list* self, unsigned index);
     /* Removes all occorences of the value on the list. */
-    void (*remove_all) (l_list* self, value_t value);
+    void (*remove_all) (l_list* self, s3_value_t value);
     /* Prints the list. */
     void (*print) (l_list* self);
 };
