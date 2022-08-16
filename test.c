@@ -15,7 +15,7 @@ int main(const int argc, const char* const* argv)
     list->add(list, value_t_factory.new_char('X'));
     list->add(list, value_t_factory.new_pointer(list));
 
-    list->print(list);
+    list->display(list);
     putchar('\n');
 
     free_list(&list);
