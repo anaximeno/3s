@@ -70,9 +70,9 @@ extern char* s3_value_t_repr(s3_value_t value)
 
     case FLOAT64: _("%lf", value->data.float64);
 
-    case STRING: _("%s", value->data.string);
+    case STRING: _("'%s'", value->data.string);
 
-    case CHARACTER: _("%c", value->data.character);
+    case CHARACTER: _("'%c'", value->data.character);
 
     case POINTER: _("&{%p}", value->data.pointer);
 
@@ -80,6 +80,9 @@ extern char* s3_value_t_repr(s3_value_t value)
         // TODO: handle here. Exit gracefully?
         break;
     }
+
+    /* Reallocates the size of the buffer to only use the space needed. */
+    buffer = realloc(buffer, strlen(buffer) + 1);
 
     return buffer;
 }
