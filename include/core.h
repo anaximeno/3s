@@ -46,6 +46,10 @@ typedef struct value_t {
      * of this structure.
      * */
     value_t_types type;
+    /* Returns a pointer to an array of characters containing
+     * the string representation of the value depending on its type.
+     * */
+    char* (*repr) (struct value_t*);
 }* value_t;
 
 /* Returns a newly allocated value_t of type INTEGER */

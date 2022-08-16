@@ -4,9 +4,13 @@
 #include <string.h>
 #include <stdio.h>
 
-#define WRAP_AROUND(STTMT) ({\
+/* This was implemented to reduce the duplication of code. */
+#define WRAP_AROUND(STATEMENTS) ({\
     value_t value_wrapper = (value_t) malloc(sizeof(struct value_t));\
-    if (value_wrapper != NULL) { STTMT }\
+    if (value_wrapper != NULL) {\
+        STATEMENTS\
+        value_wrapper->repr = &value_t_repr;\
+    }\
     return value_wrapper;\
 })
 
