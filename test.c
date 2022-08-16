@@ -7,7 +7,7 @@ CREATE_VALUE_T_FACTORY_AS(value_t_factory);
 
 int main(const int argc, const char* const* argv)
 {
-    l_list* list = new_list();
+    s3_linked_list* list = new_list();
 
     list->add(list, value_t_factory.new_string("Mike"));
     list->add(list, value_t_factory.new_int(90));
