@@ -1,3 +1,6 @@
+/* INFO: THIS SOURCE IS DEPRECATED AND WILL BE UPDATED, CURRENTLY NOT IN USE. */
+
+
 #include "../include/btree.h"
 
 #include <stdlib.h>
