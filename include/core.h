@@ -41,15 +41,22 @@ typedef struct value_t {
         char character;
         void* pointer;
     } data;
+
     /* This represents the type of the
      * data being stored on the specific instance
      * of this structure.
      * */
     value_t_types type;
+
     /* Returns a pointer to an array of characters containing
      * the string representation of the value depending on its type.
      * */
     char* (*repr) (struct value_t*);
+
+    /* Shows the string representation of the value. It doesn't appends
+     * a new line at the end of the value being printed.
+     * */
+    void (*display) (struct value_t*);
 }* value_t;
 
 /* Returns a newly allocated value_t of type INTEGER */
@@ -92,5 +99,7 @@ extern value_t new_pointer_value_t(void*);
 
 /* Converts the value to its repr, returning the value stored into the given buffer. */
 extern char* value_t_repr(value_t value);
+
+extern void value_t_display(value_t value);
 
 #endif /* _3S_CORE_HEADER */

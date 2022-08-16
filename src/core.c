@@ -4,12 +4,13 @@
 #include <string.h>
 #include <stdio.h>
 
-/* This was implemented to reduce the duplication of code. */
+/* This was implemented to reduce duplication and improve reuse. */
 #define WRAP_AROUND(STATEMENTS) ({\
     value_t value_wrapper = (value_t) malloc(sizeof(struct value_t));\
     if (value_wrapper != NULL) {\
-        STATEMENTS\
         value_wrapper->repr = &value_t_repr;\
+        value_wrapper->display = &value_t_display;\
+        STATEMENTS\
     }\
     return value_wrapper;\
 })
@@ -90,4 +91,11 @@ extern char* value_t_repr(value_t value)
     }
 
     return buffer;
+}
+
+extern void value_t_display(value_t value)
+{
+    char* repr = value_t_repr(value);
+    printf("%s", repr);
+    free(repr);
 }
