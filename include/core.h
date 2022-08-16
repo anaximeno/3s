@@ -46,33 +46,33 @@ typedef struct value_t {
      * of this structure.
      * */
     value_t_types type;
-} value_t;
+}* value_t;
 
 /* Returns a newly allocated value_t of type INTEGER */
-extern value_t* new_int_value_t(int32_t);
+extern value_t new_int_value_t(int32_t);
 /* Returns a newly allocated value_t of type UNSIGNED */
-extern value_t* new_uint_value_t(uint32_t);
+extern value_t new_uint_value_t(uint32_t);
 /* Returns a newly allocated value_t of type FLOAT32 */
-extern value_t* new_float32_value_t(float);
+extern value_t new_float32_value_t(float);
 /* Returns a newly allocated value_t of type FLOAT64 */
-extern value_t* new_float64_value_t(double);
+extern value_t new_float64_value_t(double);
 /* Returns a newly allocated value_t of type STRING */
-extern value_t* new_string_value_t(char*);
+extern value_t new_string_value_t(char*);
 /* Returns a newly allocated value_t of type CHARACTER */
-extern value_t* new_char_value_t(char);
+extern value_t new_char_value_t(char);
 /* Returns a newly allocated value_t of type POINTER */
-extern value_t* new_pointer_value_t(void*);
+extern value_t new_pointer_value_t(void*);
 
 /* When in use, a global struct named value_factory will be available. */
 #define USE_VALUE_FACTORY\
     const struct __value_t_factory {\
-        value_t* (*new_int) (int32_t);\
-        value_t* (*new_uint) (uint32_t);\
-        value_t* (*new_float32) (float);\
-        value_t* (*new_float64) (double);\
-        value_t* (*new_string) (char*);\
-        value_t* (*new_char) (char);\
-        value_t* (*new_pointer) (void*);\
+        value_t (*new_int) (int32_t);\
+        value_t (*new_uint) (uint32_t);\
+        value_t (*new_float32) (float);\
+        value_t (*new_float64) (double);\
+        value_t (*new_string) (char*);\
+        value_t (*new_char) (char);\
+        value_t (*new_pointer) (void*);\
     } value_factory = {\
         .new_int=&new_int_value_t,\
         .new_uint=&new_uint_value_t,\
