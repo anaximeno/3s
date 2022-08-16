@@ -53,7 +53,7 @@ extern s3_value_t s3_new_pointer_value_t(void* value)
 
 extern char* s3_value_t_repr(s3_value_t value)
 {
-    char* buffer = (char*) malloc(__VALUE_T_REPR_BUFFER_MAX_SIZE * sizeof(char));
+    char* buffer = (char*) calloc(__VALUE_T_REPR_BUFFER_MAX_SIZE, sizeof(char));
 
     if (buffer == NULL)
         return NULL;
