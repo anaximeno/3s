@@ -17,7 +17,7 @@ static _l_node new_linked_node(void)
     if (node != NULL) {
         node->next = NULL;
         node->prev = NULL;
-        node->value = 0;
+        node->value = NULL;
     }
 
     return node;
@@ -199,12 +199,10 @@ void print_list(l_list* self)
 {
     putchar('[');
     for (unsigned i = 0 ; i < self->length ; ++i) {
-        // The string representation of the value
-        char* repr = VALUE_T_REPR(self->get(self, i));
+        const value_t value = self->get(self, i);
 
-        printf("%s", repr);
+        value->display(value);
 
-        free(repr);
         if (i != self->length - 1)
             printf(", ");
     }
@@ -242,6 +240,9 @@ static void free_node(_l_node* node)
     if (*node != NULL) {
         if ((*node)->next != NULL)
             free_node(&(*node)->next);
+
+        if ((*node)->value != NULL)
+            free((*node)->value);
 
         free(*node);
         *node = NULL;

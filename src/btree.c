@@ -15,8 +15,8 @@ static _b_node new_b_node(void)
         node->parent = NULL;
         node->left = NULL;
         node->right = NULL;
+        node->value = NULL;
         node->rel_pos = ROOT;
-        node->value = 0;
         node->level = 0;
     }
 
