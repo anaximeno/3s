@@ -74,7 +74,7 @@ extern char* value_t_repr(value_t value)
 
     case CHARACTER: _("%c", value->data.character);
 
-    case POINTER: _("&[%p]", value->data.pointer);
+    case POINTER: _("&{%p}", value->data.pointer);
 
     default:
         // TODO: handle here. Exit gracefully?
