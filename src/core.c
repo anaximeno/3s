@@ -55,38 +55,29 @@ extern char* value_t_repr(value_t value)
 {
     char* buffer = (char*) malloc(__VALUE_T_REPR_BUFFER_MAX_SIZE * sizeof(char));
 
+    if (buffer == NULL)
+        return NULL;
+
+#define _(FORMAT, VAL) sprintf(buffer, FORMAT, VAL); break;
+
     switch (value->type)
     {
-    case INTEGER:
-        sprintf(buffer, "%d", value->data.integer);
-        break;
+    case INTEGER: _("%d", value->data.integer);
 
-    case UNSIGNED:
-        sprintf(buffer, "%u", value->data.uinteger);
-        break;
+    case UNSIGNED: _("%u", value->data.uinteger);
 
-    case FLOAT32:
-        sprintf(buffer, "%f", value->data.float32);
-        break;
+    case FLOAT32: _("%f", value->data.float32);
 
-    case FLOAT64:
-        sprintf(buffer, "%lf", value->data.float64);
-        break;
+    case FLOAT64: _("%lf", value->data.float64);
 
-    case STRING:
-        sprintf(buffer, "%s", value->data.string);
-        break;
+    case STRING: _("%s", value->data.string);
 
-    case CHARACTER:
-        sprintf(buffer, "%c", value->data.character);
-        break;
+    case CHARACTER: _("%c", value->data.character);
 
-    case POINTER:
-        sprintf(buffer, "&[%p]", value->data.pointer);
-        break;
+    case POINTER: _("&[%p]", value->data.pointer);
 
     default:
-        // TODO: handle here, exit gracefully?
+        // TODO: handle here. Exit gracefully?
         break;
     }
 
