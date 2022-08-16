@@ -73,7 +73,7 @@ extern value_t new_pointer_value_t(void*);
         value_t (*new_string) (char*);\
         value_t (*new_char) (char);\
         value_t (*new_pointer) (void*);\
-    } value_factory = {\
+    } value_t_factory = {\
         .new_int=&new_int_value_t,\
         .new_uint=&new_uint_value_t,\
         .new_float32=&new_float32_value_t,\
