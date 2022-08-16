@@ -1,13 +1,14 @@
 .PHONE = test
 
 CC = gcc
-CFLAGS = -Wall -Wextra -fPIC -g
+CFLAGS = -Wall -fPIC -g
 
 3S_LIBS = src/btree.c src/core.c src/llist.c
 3S_OBJS = btree.o core.o llist.o
 
 test: $(3S_OBJS) test.o
 	$(CC) $(CFLAGS) $^ -o $@
+	@echo Execute using ./test
 
 test.o: test.c
 	$(CC) $(CFLAGS) $^ -c
