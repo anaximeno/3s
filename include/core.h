@@ -84,51 +84,51 @@ typedef struct s3_value_t {
 }* s3_value_t;
 
 /* Returns a newly allocated s3_value_t of type INTEGER */
-extern s3_value_t s3_new_int_value_t(int32_t);
+extern s3_value_t s3_new_int(int32_t);
 /* Returns a newly allocated s3_value_t of type UNSIGNED */
-extern s3_value_t s3_new_uint_value_t(uint32_t);
+extern s3_value_t s3_new_uint(uint32_t);
 /* Returns a newly allocated s3_value_t of type FLOAT32 */
-extern s3_value_t s3_new_float32_value_t(float);
+extern s3_value_t s3_new_float32(float);
 /* Returns a newly allocated s3_value_t of type FLOAT64 */
-extern s3_value_t s3_new_float64_value_t(double);
+extern s3_value_t s3_new_float64(double);
 /* Returns a newly allocated s3_value_t of type STRING */
-extern s3_value_t s3_new_string_value_t(char*);
+extern s3_value_t s3_new_string(char*);
 /* Returns a newly allocated s3_value_t of type CHARACTER */
-extern s3_value_t s3_new_char_value_t(char);
+extern s3_value_t s3_new_char(char);
 /* Returns a newly allocated s3_value_t of type POINTER */
-extern s3_value_t s3_new_pointer_value_t(void*);
+extern s3_value_t s3_new_pointer(void*);
 /* Returns a newly allocated s3_value_t of type POINTER */
-extern s3_value_t s3_new_none_value_t(void);
+extern s3_value_t s3_new_none(void);
 
 /* When in use, a global struct named value_factory will be available. */
 #define CREATE_VALUE_T_FACTORY_AS(NAME)\
     static const struct s3_value_t_factory {\
-        s3_value_t (*new_int) (int32_t);\
-        s3_value_t (*new_uint) (uint32_t);\
-        s3_value_t (*new_float32) (float);\
-        s3_value_t (*new_float64) (double);\
-        s3_value_t (*new_string) (char*);\
-        s3_value_t (*new_char) (char);\
-        s3_value_t (*new_pointer) (void*);\
-        s3_value_t (*new_none) (void);\
+        s3_value_t (*from_int) (int32_t);\
+        s3_value_t (*from_uint) (uint32_t);\
+        s3_value_t (*from_float32) (float);\
+        s3_value_t (*from_float64) (double);\
+        s3_value_t (*from_string) (char*);\
+        s3_value_t (*from_char) (char);\
+        s3_value_t (*from_pointer) (void*);\
+        s3_value_t (*from_none) (void);\
     } NAME = {\
-        .new_int=&s3_new_int_value_t,\
-        .new_uint=&s3_new_uint_value_t,\
-        .new_float32=&s3_new_float32_value_t,\
-        .new_float64=&s3_new_float64_value_t,\
-        .new_string=&s3_new_string_value_t,\
-        .new_char=&s3_new_char_value_t,\
-        .new_pointer=&s3_new_pointer_value_t,\
-        .new_none=&s3_new_none_value_t,\
+        .from_int=&s3_new_int,\
+        .from_uint=&s3_new_uint,\
+        .from_float32=&s3_new_float32,\
+        .from_float64=&s3_new_float64,\
+        .from_string=&s3_new_string,\
+        .from_char=&s3_new_char,\
+        .from_pointer=&s3_new_pointer,\
+        .from_none=&s3_new_none,\
     };
 
 /* Maximum size of the string representation of the s3_value_t. */
 #define __VALUE_T_REPR_BUFFER_MAX_SIZE 30
 
 /* Converts the value to its repr, returning the value stored into the given buffer. */
-extern char* s3_value_t_repr(s3_value_t value);
+extern char* s3_value_repr(s3_value_t value);
 
 /* Prints the value to the stdout. */
-extern void s3_value_t_display(s3_value_t value);
+extern void s3_value_display(s3_value_t value);
 
 #endif /* _3S_CORE_HEADER */
