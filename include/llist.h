@@ -50,6 +50,16 @@ extern s3_linked_list* new_list(void);
 /* Used to free the allocated memory of a s3_linked_list structure. */
 extern void s3_list_free(s3_linked_list** list);
 
+/* Generates a block with the algorithm to create the list representation.
+ *
+ * @params LIST, PREFIX, POSTFIX, SEP, PRINT_STRATEGY
+ *
+ * @param LIST - should be a pointer to a s3_linked_list structure.
+ * @param PREFIX - a string representing the prefix of the list, ususally "["
+ * @param POSTFIX - a string representing the postfix of the list, ususally "]"
+ * @param SEP - the string that is in between each item shown.
+ * @param PRINT_STRATEGY - The strategy of the list printing algorithm. Must be FORWARD or BACKWARD.
+ */
 #define __LIST_REPR_ALGORITHM(LIST, PREFIX, POSTFIX, SEP, PRINT_STRATEGY) {\
     const unsigned __pfixex_len = strlen(PREFIX);\
     const unsigned __list_length = (LIST) != NULL ? LIST->length : 0;\
