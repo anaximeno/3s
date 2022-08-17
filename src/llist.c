@@ -232,38 +232,7 @@ static void remove_all(s3_linked_list* self, s3_value_t value)
 
 /* Returns the string representation of a list. */
 char* list_repr(s3_linked_list* self)
-{
-    const unsigned n_brackets = 2;
-    const unsigned n_commas_and_space = 2 * (self->length - 1);
-
-    size_t speculative_size = self->length * __VALUE_T_REPR_BUFFER_MAX_SIZE;
-    speculative_size += n_brackets + n_commas_and_space;
-
-    char* repr = (char*) calloc(speculative_size, sizeof(char));
-
-    if (repr != NULL) {
-        strcat(repr, "[");
-
-        for (unsigned i = 0 ; i < self->length ; ++i) {
-            const s3_value_t value = self->get(self, i);
-            char* value_repr = value->repr(value);
-
-            strcat(repr, value_repr);
-
-            if (i + 1 != self->length)
-                strcat(repr, ", ");
-
-            free(value_repr);
-        }
-
-        strcat(repr, "]");
-
-        /* Reallocates to reduce the heap mem used. */
-        repr = realloc(repr, strlen(repr) + 1);
-    }
-
-    return repr;
-}
+__LIST_REPR_ALGORITHM(self, "[", "]", ", ", FORWARD)
 
 
 /* Prints a linked list. Currently it only works for int types. */
@@ -321,7 +290,7 @@ static void free_node(s3_linked_node* node)
 
 
 /* Used to free the linked list and its nodes. */
-extern void free_list(s3_linked_list** list)
+extern void s3_list_free(s3_linked_list** list)
 {
     if (*list != NULL) {
         free_node(&(*list)->head);
