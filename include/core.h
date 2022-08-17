@@ -100,6 +100,7 @@ extern s3_value_t s3_new_pointer_value_t(void*);
 /* Converts the value to its repr, returning the value stored into the given buffer. */
 extern char* s3_value_t_repr(s3_value_t value);
 
+/* Prints the value to the stdout. */
 extern void s3_value_t_display(s3_value_t value);
 
 #endif /* _3S_CORE_HEADER */
