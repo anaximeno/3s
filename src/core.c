@@ -51,6 +51,11 @@ extern s3_value_t s3_new_pointer_value_t(void* value)
     WRAP_AROUND(value_wrapper->data.pointer = value; value_wrapper->type = POINTER;);
 }
 
+extern s3_value_t s3_new_none_value_t()
+{
+    WRAP_AROUND(value_wrapper->type = NONE;);
+}
+
 extern char* s3_value_t_repr(s3_value_t value)
 {
     char* buffer = (char*) calloc(__VALUE_T_REPR_BUFFER_MAX_SIZE, sizeof(char));
@@ -76,6 +81,7 @@ extern char* s3_value_t_repr(s3_value_t value)
 
     case POINTER: _("&{%p}", value->data.pointer);
 
+    case NONE:
     default:
         // TODO: handle here. Exit gracefully?
         break;

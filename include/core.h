@@ -1,3 +1,27 @@
+/* MIT License
+ *
+ * Copyright (c) 2022 Anaxímeno Brito
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
+ * */
+
+
 #ifndef _3S_CORE_HEADER
 #define _3S_CORE_HEADER
 
@@ -20,7 +44,7 @@
 /* The types of values allowed inside the s3_value_t wrapper. */
 typedef enum s3_value_t_types {
     INTEGER, UNSIGNED, FLOAT32, FLOAT64,
-    STRING, CHARACTER, POINTER
+    STRING, CHARACTER, POINTER, NONE
 } s3_value_t_types;
 
 
@@ -73,6 +97,8 @@ extern s3_value_t s3_new_string_value_t(char*);
 extern s3_value_t s3_new_char_value_t(char);
 /* Returns a newly allocated s3_value_t of type POINTER */
 extern s3_value_t s3_new_pointer_value_t(void*);
+/* Returns a newly allocated s3_value_t of type POINTER */
+extern s3_value_t s3_new_none_value_t(void);
 
 /* When in use, a global struct named value_factory will be available. */
 #define CREATE_VALUE_T_FACTORY_AS(NAME)\
@@ -84,6 +110,7 @@ extern s3_value_t s3_new_pointer_value_t(void*);
         s3_value_t (*new_string) (char*);\
         s3_value_t (*new_char) (char);\
         s3_value_t (*new_pointer) (void*);\
+        s3_value_t (*new_none) (void);\
     } NAME = {\
         .new_int=&s3_new_int_value_t,\
         .new_uint=&s3_new_uint_value_t,\
@@ -92,6 +119,7 @@ extern s3_value_t s3_new_pointer_value_t(void*);
         .new_string=&s3_new_string_value_t,\
         .new_char=&s3_new_char_value_t,\
         .new_pointer=&s3_new_pointer_value_t,\
+        .new_none=&s3_new_none_value_t,\
     };
 
 /* Maximum size of the string representation of the s3_value_t. */
