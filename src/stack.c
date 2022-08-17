@@ -15,7 +15,7 @@ static int push_value_to_stack(s3_stack* stack, s3_value_t value)
             /* Be aware that the function call below could still return NULL,
              * if there's no available space.
              * */
-            stack->list = new_list();
+            stack->list = s3_new_list();
         }
 
         /* If the list was or could be allocated. */
@@ -38,7 +38,7 @@ static int push_value_to_stack(s3_stack* stack, s3_value_t value)
 static s3_value_t pop_value_from_stack(s3_stack* stack)
 {
     if (stack != NULL) {
-        if (stack->list != NULL) {
+        if (stack->list != NULL && stack->list->length > 0) {
             s3_value_t value = stack->list->get(stack->list, stack->top);
             stack->list->remove_at_index(stack->list, stack->top);
             stack->size -= 1;
@@ -82,7 +82,7 @@ extern s3_stack* new_stack()
     if (stack != NULL) {
         stack->top = EMPTY_STACK_TOP;
         stack->size = 0;
-        stack->list = new_list();
+        stack->list = s3_new_list();
 
         stack->push = &push_value_to_stack;
         stack->pop = &pop_value_from_stack;

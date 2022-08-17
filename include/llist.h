@@ -45,7 +45,7 @@ struct s3_list_t {
 
 
 /* Returns a pointer new allocated linked list. */
-extern s3_list_t* new_list(void);
+extern s3_list_t* s3_new_list(void);
 
 /* Used to free the allocated memory of a s3_list_t structure. */
 extern void s3_list_free(s3_list_t** list);

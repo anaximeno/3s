@@ -245,7 +245,7 @@ void display_list(s3_list_t* self)
 
 
 /* Allocates and returns a new linked list, if possible. */
-extern s3_list_t* new_list(void)
+extern s3_list_t* s3_new_list(void)
 {
     s3_list_t* list = (s3_list_t*) malloc(sizeof(s3_list_t));
 
