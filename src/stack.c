@@ -64,7 +64,7 @@ static size_t length_of_stack(s3_stack* stack)
 
 
 static char* stack_repr(s3_stack* stack)
-__LIST_REPR_ALGORITHM(stack->list, "$[", "]>", " | ", FORWARD)
+__LIST_REPR_ALGORITHM(stack->list, "$[", "]>", "|", FORWARD)
 
 
 static void stack_display(s3_stack* self)
