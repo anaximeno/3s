@@ -52,12 +52,13 @@ extern void s3_list_free(s3_linked_list** list);
 
 #define __LIST_REPR_ALGORITHM(LIST, PREFIX, POSTFIX, SEP, PRINT_STRATEGY) {\
     const unsigned __pfixex_len = strlen(PREFIX);\
-    const unsigned __sep_len = strlen(SEP) * (LIST->length - 1);\
-    size_t __speculative_size = LIST->length * __VALUE_T_REPR_BUFFER_MAX_SIZE;\
+    const unsigned __list_length = (LIST) != NULL ? LIST->length : 0;\
+    const unsigned __sep_len = strlen(SEP) * (__list_length - 1);\
+    size_t __speculative_size = __list_length * __VALUE_T_REPR_BUFFER_MAX_SIZE;\
     __speculative_size += __pfixex_len + __sep_len;\
     char* repr = (char*) calloc(__speculative_size, sizeof(char));\
     if (repr != NULL) {\
-        strcat(repr, PREFIX);\
+        strcat(repr, (PREFIX));\
         __PRINT_LIST_##PRINT_STRATEGY(LIST, SEP);\
         strcat(repr, POSTFIX);\
         repr = realloc(repr, strlen(repr) + 1);\
@@ -66,18 +67,18 @@ extern void s3_list_free(s3_linked_list** list);
 }
 
 #define __PRINT_LIST_FORWARD(LIST, SEP) {\
-    for (unsigned i = 0 ; i < LIST->length ; ++i) {\
+    for (unsigned i = 0 ; i < __list_length ; ++i) {\
         const s3_value_t value = LIST->get(LIST, i);\
         char* value_repr = value->repr(value);\
         strcat(repr, value_repr);\
-        if (i + 1 != LIST->length)\
+        if (i + 1 != __list_length)\
             strcat(repr, SEP);\
         free(value_repr);\
     }\
 }
 
 #define __PRINT_LIST_BACKWARD(LIST, SEP) {\
-    for (unsigned i = LIST->length ; i > 0 ; --i) {\
+    for (unsigned i = __list_length ; i > 0 ; --i) {\
         const s3_value_t value = LIST->get(LIST, i - 1);\
         char* value_repr = value->repr(value);\
         strcat(repr, value_repr);\
