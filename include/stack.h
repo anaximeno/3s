@@ -16,7 +16,7 @@ struct s3_stack {
     unsigned size;
 
     /* The list were values will be stored into. */
-    s3_linked_list* list;
+    s3_list_t* list;
 
     /* Adds a new item to the top of the stack. */
     int (*push) (s3_stack* self, s3_value_t value);

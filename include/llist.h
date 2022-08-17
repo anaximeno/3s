@@ -7,7 +7,7 @@
 #include <string.h>
 
 
-typedef struct s3_linked_list s3_linked_list;
+typedef struct s3_list_t s3_list_t;
 
 
 /* Represents a unique node of the doubly-linked list. */
@@ -19,42 +19,42 @@ struct s3_linked_node {
 
 
 /* Represents the linked list as a whole. */
-struct s3_linked_list {
+struct s3_list_t {
     struct s3_linked_node* head;
     struct s3_linked_node* tail;
     unsigned length;
 
     /* Add a new value to the front of the list. */
-    void (*append_front) (s3_linked_list* self, s3_value_t value);
+    void (*append_front) (s3_list_t* self, s3_value_t value);
     /* Add a new value to the back of the list. */
-    void (*append_back) (s3_linked_list* self, s3_value_t value);
+    void (*append_back) (s3_list_t* self, s3_value_t value);
     /* Returns the first index of the value on this list. */
-    int (*index) (s3_linked_list* self, s3_value_t value);
+    int (*index) (s3_list_t* self, s3_value_t value);
     /* Returns the value at the given index. Zero will be returned
      * by default for out of bound indexes. */
-    s3_value_t (*get) (s3_linked_list* self, unsigned index);
+    s3_value_t (*get) (s3_list_t* self, unsigned index);
     /* Removed a value at the given index. */
-    void (*remove_at_index) (s3_linked_list* self, unsigned index);
+    void (*remove_at_index) (s3_list_t* self, unsigned index);
     /* Removes all occorences of the value on the list. */
-    void (*remove_all) (s3_linked_list* self, s3_value_t value);
+    void (*remove_all) (s3_list_t* self, s3_value_t value);
     /* Prints the list. */
-    void (*display) (s3_linked_list* self);
+    void (*display) (s3_list_t* self);
     /* Returns the string representation of this list.*/
-    char* (*repr) (s3_linked_list* self);
+    char* (*repr) (s3_list_t* self);
 };
 
 
 /* Returns a pointer new allocated linked list. */
-extern s3_linked_list* new_list(void);
+extern s3_list_t* new_list(void);
 
-/* Used to free the allocated memory of a s3_linked_list structure. */
-extern void s3_list_free(s3_linked_list** list);
+/* Used to free the allocated memory of a s3_list_t structure. */
+extern void s3_list_free(s3_list_t** list);
 
 /* Generates a block with the algorithm to create the list representation.
  *
  * @params LIST, PREFIX, POSTFIX, SEP, PRINT_STRATEGY
  *
- * @param LIST - should be a pointer to a s3_linked_list structure.
+ * @param LIST - should be a pointer to a s3_list_t structure.
  * @param PREFIX - a string representing the prefix of the list, ususally "["
  * @param POSTFIX - a string representing the postfix of the list, ususally "]"
  * @param SEP - the string that is in between each item shown.
