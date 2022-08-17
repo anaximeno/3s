@@ -26,7 +26,7 @@ static s3_linked_node new_linked_node(void)
 
 
 /* Used to add a new value to the back of the linked list. */
-static void append_to_the_back_of_the_list(s3_linked_list* self, s3_value_t value)
+static void append_to_the_back_of_the_list(s3_list_t* self, s3_value_t value)
 {
     if (self != NULL) {
         if (self->head == NULL) {
@@ -63,7 +63,7 @@ static void append_to_the_back_of_the_list(s3_linked_list* self, s3_value_t valu
 
 
 /* Used to add a new value to the front of the linked list. */
-static void append_to_the_front_of_the_list(s3_linked_list* self, s3_value_t value)
+static void append_to_the_front_of_the_list(s3_list_t* self, s3_value_t value)
 {
     if (self != NULL) {
         if (self->head == NULL) {
@@ -102,7 +102,7 @@ static void append_to_the_front_of_the_list(s3_linked_list* self, s3_value_t val
  * If the value was not found the constant `VALUE_NOT_FOUND` is
  * returned instead.
  * */
-static int get_index_of_value(s3_linked_list* self, s3_value_t value)
+static int get_index_of_value(s3_list_t* self, s3_value_t value)
 {
     s3_linked_node node = NULL;
     unsigned idx = 0;
@@ -116,7 +116,7 @@ static int get_index_of_value(s3_linked_list* self, s3_value_t value)
 
 
 /* Returns a node at the given index. */
-static s3_linked_node get_node_at_index(s3_linked_list* list, unsigned index)
+static s3_linked_node get_node_at_index(s3_list_t* list, unsigned index)
 {
 #ifdef _MAKE_ROBUST_CHECK
     assert(index >= 0);
@@ -160,7 +160,7 @@ static s3_linked_node get_node_at_index(s3_linked_list* list, unsigned index)
 /* Returns the value at the given index. NULL will be returned
  * by default for out of bound indexes.
  * */
-static s3_value_t get_value_at_index(s3_linked_list* self, unsigned idx)
+static s3_value_t get_value_at_index(s3_list_t* self, unsigned idx)
 {
 #ifdef _MAKE_ROBUST_CHECK
     assert(idx >= 0);
@@ -180,7 +180,7 @@ static s3_value_t get_value_at_index(s3_linked_list* self, unsigned idx)
 
 
 /* Removes the value at the given index. */
-static void remove_at_index(s3_linked_list* self, unsigned index)
+static void remove_at_index(s3_list_t* self, unsigned index)
 {
 #ifdef _MAKE_ROBUST_CHECK
     assert(index >= 0);
@@ -219,7 +219,7 @@ static void remove_at_index(s3_linked_list* self, unsigned index)
 
 
 /* Completely removes the value from the list. */
-static void remove_all(s3_linked_list* self, s3_value_t value)
+static void remove_all(s3_list_t* self, s3_value_t value)
 {
     int index = VALUE_NOT_FOUND;
     while ((index = get_index_of_value(self, value)) != VALUE_NOT_FOUND) {
@@ -231,12 +231,12 @@ static void remove_all(s3_linked_list* self, s3_value_t value)
 }
 
 /* Returns the string representation of a list. */
-char* list_repr(s3_linked_list* self)
+char* list_repr(s3_list_t* self)
 __LIST_REPR_ALGORITHM(self, "[", "]", ", ", FORWARD)
 
 
-/* Prints a linked list. Currently it only works for int types. */
-void display_list(s3_linked_list* self)
+/* Prints a linked list. */
+void display_list(s3_list_t* self)
 {
     char* repr = list_repr(self);
     printf("%s", repr);
@@ -245,9 +245,9 @@ void display_list(s3_linked_list* self)
 
 
 /* Allocates and returns a new linked list, if possible. */
-extern s3_linked_list* new_list(void)
+extern s3_list_t* new_list(void)
 {
-    s3_linked_list* list = (s3_linked_list*) malloc(sizeof(s3_linked_list));
+    s3_list_t* list = (s3_list_t*) malloc(sizeof(s3_list_t));
 
     if (list != NULL) {
         /* The allocation was made gracefully. */
@@ -290,7 +290,7 @@ static void free_node(s3_linked_node* node)
 
 
 /* Used to free the linked list and its nodes. */
-extern void s3_list_free(s3_linked_list** list)
+extern void s3_list_free(s3_list_t** list)
 {
     if (*list != NULL) {
         free_node(&(*list)->head);
