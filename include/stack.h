@@ -4,6 +4,8 @@
 #include "./core.h"
 #include "./llist.h"
 
+#define EMPTY_STACK_TOP -1
+
 typedef struct s3_stack s3_stack;
 
 struct s3_stack {
@@ -17,7 +19,7 @@ struct s3_stack {
     s3_linked_list* list;
 
     /* Adds a new item to the top of the stack. */
-    void (*push) (s3_stack* self, s3_value_t value);
+    int (*push) (s3_stack* self, s3_value_t value);
 
     /* Returns the item in the top of the stack, removing it from the stack.
      * If no values are found in the stack, then it returns NULL by default.
@@ -27,7 +29,7 @@ struct s3_stack {
     /* Returns the length of the stack, which represents how
      * many items are in the stack.
      * */
-    unsigned (*length) (s3_stack* self);
+    size_t (*length) (s3_stack* self);
 
     /* Returns a string representing the items in the stack. */
     char* (*repr) (s3_stack* self);
@@ -37,6 +39,9 @@ struct s3_stack {
 };
 
 /* Creates and returns a new stack. */
-extern s3_stack new_stack();
+extern s3_stack* new_stack();
+
+/* Deallocates the memory used in the stack. */
+extern void s3_stack_free(s3_stack** stack);
 
 #endif
