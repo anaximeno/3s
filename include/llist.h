@@ -23,8 +23,10 @@ struct s3_linked_list {
     struct s3_linked_node* tail;
     unsigned length;
 
-    /* Add a new value to the list. */
-    void (*add) (s3_linked_list* self, s3_value_t value);
+    /* Add a new value to the front of the list. */
+    void (*append_front) (s3_linked_list* self, s3_value_t value);
+    /* Add a new value to the back of the list. */
+    void (*append_back) (s3_linked_list* self, s3_value_t value);
     /* Returns the first index of the value on this list. */
     int (*index) (s3_linked_list* self, s3_value_t value);
     /* Returns the value at the given index. Zero will be returned

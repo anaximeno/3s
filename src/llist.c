@@ -25,8 +25,8 @@ static s3_linked_node new_linked_node(void)
 }
 
 
-/* Used to add a new value to the linked list. */
-static void add_to_linked_list(s3_linked_list* self, s3_value_t value)
+/* Used to add a new value to the back of the linked list. */
+static void append_to_the_back_of_the_list(s3_linked_list* self, s3_value_t value)
 {
     if (self != NULL) {
         if (self->head == NULL) {
@@ -52,7 +52,43 @@ static void add_to_linked_list(s3_linked_list* self, s3_value_t value)
                 } else {
                     next->prev = self->tail;
                     self->tail->next = next;
-                    self->tail = self->tail->next;
+                    self->tail = next;
+                }
+
+                self->length += 1;
+            }
+        }
+    }
+}
+
+
+/* Used to add a new value to the front of the linked list. */
+static void append_to_the_front_of_the_list(s3_linked_list* self, s3_value_t value)
+{
+    if (self != NULL) {
+        if (self->head == NULL) {
+            s3_linked_node head = new_linked_node();
+
+            if (head != NULL) {
+                head->value = value;
+                self->head = head;
+                self->tail = head;
+                self->length = 1;
+            }
+        } else {
+            s3_linked_node prev = new_linked_node();
+
+            if (prev != NULL) {
+                prev->value = value;
+
+                if (self->tail->prev == NULL) {
+                    self->tail->prev = prev;
+                    prev->next = self->tail;
+                    self->head = prev;
+                } else {
+                    prev->next = self->head;
+                    self->head->prev = prev;
+                    self->head = prev;
                 }
 
                 self->length += 1;
@@ -250,7 +286,8 @@ extern s3_linked_list* new_list(void)
         list->tail = NULL;
         list->length = 0;
 
-        list->add = &add_to_linked_list;
+        list->append_back = &append_to_the_back_of_the_list;
+        list->append_front = &append_to_the_front_of_the_list;
         list->index = &get_index_of_value;
         list->get = &get_value_at_index;
         list->remove_at_index = &remove_at_index;
