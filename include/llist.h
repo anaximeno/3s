@@ -43,12 +43,41 @@ struct s3_list_t {
     char* (*repr) (s3_list_t* self);
 };
 
+/* Used to add a new value to the back of the linked list. */
+extern void s3_list_append_back(s3_list_t* list, s3_value_t value);
+
+/* Used to add a new value to the front of the linked list. */
+extern void s3_list_append_front(s3_list_t* list, s3_value_t value);
+
+/* Returns the index of a value in the list.
+ * If the value was not found the constant `VALUE_NOT_FOUND` is
+ * returned instead.
+ * */
+extern int s3_list_get_first_index(s3_list_t* list, s3_value_t value);
+
+
+/* Returns the value at the given index. NULL will be returned
+ * by default for out of bound indexes.
+ * */
+extern s3_value_t s3_list_get_value(s3_list_t* list, unsigned idx);
+
+/* Removes the value at the given index. */
+extern void s3_list_remove_at_index(s3_list_t* list, unsigned index);
+
+/* Removes all occorences of the value on the list. */
+extern void s3_list_remove_value(s3_list_t* list, s3_value_t value);
 
 /* Returns a pointer new allocated linked list. */
 extern s3_list_t* s3_new_list(void);
 
 /* Used to free the allocated memory of a s3_list_t structure. */
 extern void s3_list_free(s3_list_t** list);
+
+/* Returns the string representation of a list. */
+extern char* s3_list_repr(s3_list_t* list);
+
+/* Prints a linked list. */
+extern void s3_list_display(s3_list_t* list);
 
 /* Generates a block with the algorithm to create the list representation.
  *

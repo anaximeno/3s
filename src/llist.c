@@ -26,17 +26,17 @@ static s3_linked_node new_linked_node(void)
 
 
 /* Used to add a new value to the back of the linked list. */
-static void append_to_the_back_of_the_list(s3_list_t* self, s3_value_t value)
+extern void s3_list_append_back(s3_list_t* list, s3_value_t value)
 {
-    if (self != NULL) {
-        if (self->head == NULL) {
+    if (list != NULL) {
+        if (list->head == NULL) {
             s3_linked_node head = new_linked_node();
 
             if (head != NULL) {
                 head->value = value;
-                self->head = head;
-                self->tail = head;
-                self->length = 1;
+                list->head = head;
+                list->tail = head;
+                list->length = 1;
             }
         } else {
             s3_linked_node next = new_linked_node();
@@ -45,17 +45,17 @@ static void append_to_the_back_of_the_list(s3_list_t* self, s3_value_t value)
                 next->value = value;
                 next->next = NULL;
 
-                if (self->head->next == NULL) {
-                    self->head->next = next;
-                    next->prev = self->head;
-                    self->tail = next;
+                if (list->head->next == NULL) {
+                    list->head->next = next;
+                    next->prev = list->head;
+                    list->tail = next;
                 } else {
-                    next->prev = self->tail;
-                    self->tail->next = next;
-                    self->tail = next;
+                    next->prev = list->tail;
+                    list->tail->next = next;
+                    list->tail = next;
                 }
 
-                self->length += 1;
+                list->length += 1;
             }
         }
     }
@@ -63,17 +63,17 @@ static void append_to_the_back_of_the_list(s3_list_t* self, s3_value_t value)
 
 
 /* Used to add a new value to the front of the linked list. */
-static void append_to_the_front_of_the_list(s3_list_t* self, s3_value_t value)
+extern void s3_list_append_front(s3_list_t* list, s3_value_t value)
 {
-    if (self != NULL) {
-        if (self->head == NULL) {
+    if (list != NULL) {
+        if (list->head == NULL) {
             s3_linked_node head = new_linked_node();
 
             if (head != NULL) {
                 head->value = value;
-                self->head = head;
-                self->tail = head;
-                self->length = 1;
+                list->head = head;
+                list->tail = head;
+                list->length = 1;
             }
         } else {
             s3_linked_node prev = new_linked_node();
@@ -81,17 +81,17 @@ static void append_to_the_front_of_the_list(s3_list_t* self, s3_value_t value)
             if (prev != NULL) {
                 prev->value = value;
 
-                if (self->tail->prev == NULL) {
-                    self->tail->prev = prev;
-                    prev->next = self->tail;
-                    self->head = prev;
+                if (list->tail->prev == NULL) {
+                    list->tail->prev = prev;
+                    prev->next = list->tail;
+                    list->head = prev;
                 } else {
-                    prev->next = self->head;
-                    self->head->prev = prev;
-                    self->head = prev;
+                    prev->next = list->head;
+                    list->head->prev = prev;
+                    list->head = prev;
                 }
 
-                self->length += 1;
+                list->length += 1;
             }
         }
     }
@@ -102,12 +102,12 @@ static void append_to_the_front_of_the_list(s3_list_t* self, s3_value_t value)
  * If the value was not found the constant `VALUE_NOT_FOUND` is
  * returned instead.
  * */
-static int get_index_of_value(s3_list_t* self, s3_value_t value)
+extern int s3_list_get_first_index(s3_list_t* list, s3_value_t value)
 {
     s3_linked_node node = NULL;
     unsigned idx = 0;
 
-    for (node = self->head, idx = 0 ; node != NULL ; node = node->next, ++idx)
+    for (node = list->head, idx = 0 ; node != NULL ; node = node->next, ++idx)
         if (node->value == value)
             return idx;
 
@@ -160,7 +160,7 @@ static s3_linked_node get_node_at_index(s3_list_t* list, unsigned index)
 /* Returns the value at the given index. NULL will be returned
  * by default for out of bound indexes.
  * */
-static s3_value_t get_value_at_index(s3_list_t* self, unsigned idx)
+extern s3_value_t s3_list_get_value(s3_list_t* list, unsigned idx)
 {
 #ifdef _MAKE_ROBUST_CHECK
     assert(idx >= 0);
@@ -168,8 +168,8 @@ static s3_value_t get_value_at_index(s3_list_t* self, unsigned idx)
 
 #define DEFAULT_RETURN_TYPE NULL
 
-    if (self != NULL && idx < self->length) {
-        s3_linked_node node = get_node_at_index(self, idx);
+    if (list != NULL && idx < list->length) {
+        s3_linked_node node = get_node_at_index(list, idx);
 
         if (node != NULL)
             return node->value;
@@ -180,15 +180,15 @@ static s3_value_t get_value_at_index(s3_list_t* self, unsigned idx)
 
 
 /* Removes the value at the given index. */
-static void remove_at_index(s3_list_t* self, unsigned index)
+extern void s3_list_remove_at_index(s3_list_t* list, unsigned index)
 {
 #ifdef _MAKE_ROBUST_CHECK
     assert(index >= 0);
-    assert(self->length >= 0); // invariant
+    assert(list->length >= 0); // invariant
 #endif
 
-    if (self != NULL && index < self->length) {
-        s3_linked_node node = get_node_at_index(self, index);
+    if (list != NULL && index < list->length) {
+        s3_linked_node node = get_node_at_index(list, index);
 
         if (node != NULL) {
             if (node->prev != NULL)
@@ -196,10 +196,10 @@ static void remove_at_index(s3_list_t* self, unsigned index)
             if (node->next != NULL)
                 node->next->prev = node->prev;
 
-            if (node == self->head)
-                self->head = node->next;
-            if (node == self->tail)
-                self->tail = node->prev;
+            if (node == list->head)
+                list->head = node->next;
+            if (node == list->tail)
+                list->tail = node->prev;
 
             node->next = NULL;
             node->prev = NULL;
@@ -207,11 +207,11 @@ static void remove_at_index(s3_list_t* self, unsigned index)
             free(node);
 
             node = NULL;
-            self->length -= 1;
+            list->length -= 1;
         }
 
 #ifdef _MAKE_ROBUST_CHECK
-        assert(self->length >= 0); // invariant
+        assert(list->length >= 0); // invariant
         assert(node == NULL);
 #endif
     }
@@ -219,26 +219,26 @@ static void remove_at_index(s3_list_t* self, unsigned index)
 
 
 /* Completely removes the value from the list. */
-static void remove_all(s3_list_t* self, s3_value_t value)
+extern void s3_list_remove_value(s3_list_t* list, s3_value_t value)
 {
     int index = VALUE_NOT_FOUND;
-    while ((index = get_index_of_value(self, value)) != VALUE_NOT_FOUND) {
-        remove_at_index(self, (unsigned) index);
+    while ((index = s3_list_get_first_index(list, value)) != VALUE_NOT_FOUND) {
+        s3_list_remove_at_index(list, (unsigned) index);
     }
 #ifdef _MAKE_ROBUST_CHECK
-    assert(get_index_of_value(self, value) == VALUE_NOT_FOUND);
+    assert(s3_list_get_first_index(list, value) == VALUE_NOT_FOUND);
 #endif
 }
 
 /* Returns the string representation of a list. */
-char* list_repr(s3_list_t* self)
-__LIST_REPR_ALGORITHM(self, "[", "]", ", ", FORWARD)
+extern char* s3_list_repr(s3_list_t* list)
+__LIST_REPR_ALGORITHM(list, "[", "]", ", ", FORWARD)
 
 
 /* Prints a linked list. */
-void display_list(s3_list_t* self)
+extern void s3_list_display(s3_list_t* list)
 {
-    char* repr = list_repr(self);
+    char* repr = s3_list_repr(list);
     printf("%s", repr);
     free(repr);
 }
@@ -255,14 +255,14 @@ extern s3_list_t* s3_new_list(void)
         list->tail = NULL;
         list->length = 0;
 
-        list->append_back = &append_to_the_back_of_the_list;
-        list->append_front = &append_to_the_front_of_the_list;
-        list->index = &get_index_of_value;
-        list->get = &get_value_at_index;
-        list->remove_at_index = &remove_at_index;
-        list->remove_all = &remove_all;
-        list->display = &display_list;
-        list->repr = &list_repr;
+        list->append_back = &s3_list_append_back;
+        list->append_front = &s3_list_append_front;
+        list->index = &s3_list_get_first_index;
+        list->get = &s3_list_get_value;
+        list->remove_at_index = &s3_list_remove_at_index;
+        list->remove_all = &s3_list_remove_value;
+        list->display = &s3_list_display;
+        list->repr = &s3_list_repr;
 
         return list;
     } else /* The allocation could not be made. */
@@ -271,11 +271,11 @@ extern s3_list_t* s3_new_list(void)
 
 
 /* Used to free the nodes of a linked list recursivelly. */
-static void free_node(s3_linked_node* node)
+static void list_node_free(s3_linked_node* node)
 {
     if (*node != NULL) {
         if ((*node)->next != NULL)
-            free_node(&(*node)->next);
+            list_node_free(&(*node)->next);
 
         if ((*node)->value != NULL)
             free((*node)->value);
@@ -293,7 +293,7 @@ static void free_node(s3_linked_node* node)
 extern void s3_list_free(s3_list_t** list)
 {
     if (*list != NULL) {
-        free_node(&(*list)->head);
+        list_node_free(&(*list)->head);
         free(*list);
         *list = NULL;
     }
