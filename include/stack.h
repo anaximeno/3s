@@ -34,6 +34,9 @@ struct s3_stack {
 
     /* Prints the stack representation to the stdout. */
     void (*display) (s3_stack* self);
-}
+};
+
+/* Creates and returns a new stack. */
+extern s3_stack new_stack();
 
 #endif
