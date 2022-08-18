@@ -17,6 +17,8 @@ extern int s3_stack_push(s3_stack_t* stack, s3_value_t value)
              * if there's no available space.
              * */
             stack->list = s3_new_list();
+            stack->size = 0;
+            stack->top = EMPTY_STACK_TOP;
         }
 
         /* If the list was or could be allocated. */
@@ -77,7 +79,7 @@ extern size_t s3_stack_length(s3_stack_t* stack)
 
 /* Returns a string representing the items in the stack. */
 extern char* s3_stack_repr(s3_stack_t* stack)
-__LIST_REPR_ALGORITHM(stack->list, "$[", "]>", "|", FORWARD)
+__LIST_REPR_ALGORITHM(stack->list, "$[", "]>", "|", FORWARD);
 
 
 /* Prints the stack representation to the stdout. */
