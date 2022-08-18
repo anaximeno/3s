@@ -45,10 +45,10 @@
 #define _MAKE_ROBUST_CHECK
 
 /* The types of values allowed inside the s3_value_t wrapper. */
-typedef enum s3_value_t_types {
+typedef enum s3_value_types {
     INTEGER, UNSIGNED, FLOAT32, FLOAT64,
     STRING, CHARACTER, POINTER, NONE
-} s3_value_t_types;
+} s3_value_types;
 
 
 /* Wrapper used to store the actual data inside.
@@ -73,7 +73,7 @@ typedef struct s3_value_t {
      * data being stored on the specific instance
      * of this structure.
      * */
-    s3_value_t_types type;
+    s3_value_types type;
 
     /* Returns a pointer to an array of characters containing
      * the string representation of the value depending on its type.
@@ -105,7 +105,7 @@ extern s3_value_t s3_value_none(void);
 
 /* When in use, a global struct named value_factory will be available. */
 #define CREATE_VALUE_T_FACTORY_AS(NAME)\
-    static const struct s3_value_t_factory {\
+    static const struct s3_value_factory {\
         s3_value_t (*from_int) (int32_t);\
         s3_value_t (*from_uint) (uint32_t);\
         s3_value_t (*from_float32) (float);\
