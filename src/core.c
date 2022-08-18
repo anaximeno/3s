@@ -17,25 +17,25 @@
 }
 
 extern s3_value_t s3_value_int(int32_t value)
-WRAP_AROUND(value_wrapper->data.integer = value; value_wrapper->type = INTEGER;)
+WRAP_AROUND(value_wrapper->data.integer = value; value_wrapper->type = INTEGER;);
 
 extern s3_value_t s3_value_uint(uint32_t value)
-WRAP_AROUND(value_wrapper->data.uinteger = value; value_wrapper->type = UNSIGNED;)
+WRAP_AROUND(value_wrapper->data.uinteger = value; value_wrapper->type = UNSIGNED;);
 
 extern s3_value_t s3_value_float32(float value)
-WRAP_AROUND(value_wrapper->data.float32 = value; value_wrapper->type = FLOAT32;)
+WRAP_AROUND(value_wrapper->data.float32 = value; value_wrapper->type = FLOAT32;);
 
 extern s3_value_t s3_value_float64(double value)
-WRAP_AROUND(value_wrapper->data.float64 = value; value_wrapper->type = FLOAT64;)
+WRAP_AROUND(value_wrapper->data.float64 = value; value_wrapper->type = FLOAT64;);
 
 extern s3_value_t s3_value_string(char* value)
-WRAP_AROUND(value_wrapper->data.string = value; value_wrapper->type = STRING;)
+WRAP_AROUND(value_wrapper->data.string = value; value_wrapper->type = STRING;);
 
 extern s3_value_t s3_value_char(char value)
-WRAP_AROUND(value_wrapper->data.character = value; value_wrapper->type = CHARACTER;)
+WRAP_AROUND(value_wrapper->data.character = value; value_wrapper->type = CHARACTER;);
 
 extern s3_value_t s3_value_pointer(void* value)
-WRAP_AROUND(value_wrapper->data.pointer = value; value_wrapper->type = POINTER;)
+WRAP_AROUND(value_wrapper->data.pointer = value; value_wrapper->type = POINTER;);
 
 extern s3_value_t s3_value_none()
 WRAP_AROUND(value_wrapper->type = NONE;);
