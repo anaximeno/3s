@@ -30,10 +30,12 @@
     #include <unistd.h>
     #define SLEEP(milisecs) (usleep(1000 * milisecs))
     #define CLEAR_TERM (system("clear"))
-#else // Windows
+#elif _WIN32
     #include <Windows.h>
     #define SLEEP(milisecs) (Sleep(milisecs))
     #define CLEAR_TERM (system("cls"))
+#else
+    #error "Unsupported system!"
 #endif
 
 #define SLEEP_MILISECONDS 1000
