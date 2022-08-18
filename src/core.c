@@ -137,7 +137,7 @@ extern int s3_value_compare(s3_value_t value1, s3_value_t value2)
         case STRING:
             int comp = strcmp(value1->data.string, value2->data.string);
 #ifdef _MAKE_ROBUST_CHECK
-            assert(comp == S3_VALUE_LESS || comp == S3_VALUE_GREATER || S3_VALUE_EQUAL);
+            assert(comp == S3_VALUE_LESS || comp == S3_VALUE_GREATER || comp == S3_VALUE_EQUAL);
 #endif
             return comp;
 
