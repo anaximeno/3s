@@ -59,12 +59,14 @@ struct s3_tree_node {
     size_t depth;
 };
 
-
+//TODO: (do-)comment the fields of the tree
 /* Represents the binary tree as a whole. */
 struct s3_tree_t {
     struct s3_tree_node* root;
+    s3_tree_t* next;
     s3_tree_on_repeated on_repeated;
     size_t full_depth;
+    s3_value_types type_of_value;
 
     /* Adds a new value to the binary tree. If the value was added successfully
      * it returns the depth of the value, else the constant S3_TREE_VALUE_NOT_ADDED.
