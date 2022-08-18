@@ -29,9 +29,4 @@
 #include "./stack.h"
 #include "./queue.h"
 
-// TODO: update the header below
-// #include "./btree.h"
-
-
-
 #endif /* 3S_HEADER */

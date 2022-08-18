@@ -3,8 +3,8 @@
 CC = gcc
 CFLAGS = -Wall -fPIC -g
 
-3S_LIBS = src/btree.c src/core.c src/llist.c src/stack.c src/queue.c
-3S_OBJS = btree.o core.o llist.o stack.o queue.o
+3S_LIBS = src/core.c src/llist.c src/stack.c src/queue.c
+3S_OBJS = core.o llist.o stack.o queue.o
 
 EXAMPLES_BIN = example01 example02 example03
 
