@@ -96,28 +96,28 @@ struct s3_tree_t {
 /* Adds a new value to the binary tree. If the value was added successfully
  * it returns the depth of the value, else the constant S3_TREE_VALUE_NOT_ADDED.
  * */
-int s3_tree_add(s3_tree_t* tree, s3_value_t value);
+extern int s3_tree_add(s3_tree_t* tree, s3_value_t value);
 
 /* Searchs for the value on the tree and returns the depth in
  * which it was firstly found. If the value is not inside the tree,
  * the constant `S3_TREE_VALUE_NOT_ADDED` is returned.
  * */
-int s3_tree_search(s3_tree_t* tree, s3_value_t value);
+extern int s3_tree_search(s3_tree_t* tree, s3_value_t value);
 
 /* Removes the given value completely from the s3_tree_t.
  * If the repetition strategy chosen was APPEND_(LEFT/RIGTH),
  * other repetitions will also be removed.
  * */
-void s3_tree_remove(s3_tree_t* tree, s3_value_t value);
+extern void s3_tree_remove(s3_tree_t* tree, s3_value_t value);
 
 /* Returns the string representation of this tree, organized in the give order. */
-char* s3_tree_repr(s3_tree_t* tree, s3_tree_printing_order order);
+extern char* s3_tree_repr(s3_tree_t* tree, s3_tree_printing_order order);
 
 /* Prints the binary tree in the order determined by the param ord. */
-void s3_tree_display(s3_tree_t* tree, s3_tree_printing_order order);
+extern void s3_tree_display(s3_tree_t* tree, s3_tree_printing_order order);
 
 /* Balances the binary tree using the AVL tree balancing algorithm. */
-void s3_tree_balance(s3_tree_t* tree);
+extern void s3_tree_balance(s3_tree_t* tree);
 
 /* Returns a pointer new allocated binary tree.
  * The parameter on_repeated is used to determine
