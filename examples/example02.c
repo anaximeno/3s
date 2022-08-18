@@ -42,9 +42,9 @@ int main(int argc, char* argv[])
 {
     s3_stack_t* stack = s3_new_stack();
     s3_value_t values[5] = {
-        s3_new_int(12), s3_new_float64(1.224444551),
-        s3_new_string("Stack"), s3_new_uint(0),
-        s3_new_char('X')
+        s3_value_int(12), s3_value_float64(1.224444551),
+        s3_value_string("Stack"), s3_value_uint(0),
+        s3_value_char('X')
     };
     s3_value_t value = NULL;
     char* value_repr = NULL;

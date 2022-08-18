@@ -31,20 +31,20 @@ int main(int argc, char* argv[])
 {
     s3_list_t* list = s3_new_list();
 
-    list->append_back(list, s3_new_int(9));
-    list->append_back(list, s3_new_string("Hello, 3s!"));
-    list->append_back(list, s3_new_float32(6.5));
-    list->append_back(list, s3_new_pointer(list));
+    list->append_back(list, s3_value_int(9));
+    list->append_back(list, s3_value_string("Hello, 3s!"));
+    list->append_back(list, s3_value_float32(6.5));
+    list->append_back(list, s3_value_pointer(list));
 
     /* note: appending to the front of the list! */
-    list->append_front(list, s3_new_float32(6.5));
+    list->append_front(list, s3_value_float32(6.5));
 
     list->display(list);
     putchar('\n');
 
     puts("\nNow removing all occorences of 6.5 on the list.\n");
 
-    s3_value_t value = s3_new_float32(6.5);
+    s3_value_t value = s3_value_float32(6.5);
     list->remove_all(list, value);
     free(value);
 

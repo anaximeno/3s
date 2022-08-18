@@ -87,21 +87,21 @@ typedef struct s3_value_t {
 }* s3_value_t;
 
 /* Returns a newly allocated s3_value_t of type INTEGER */
-extern s3_value_t s3_new_int(int32_t);
+extern s3_value_t s3_value_int(int32_t);
 /* Returns a newly allocated s3_value_t of type UNSIGNED */
-extern s3_value_t s3_new_uint(uint32_t);
+extern s3_value_t s3_value_uint(uint32_t);
 /* Returns a newly allocated s3_value_t of type FLOAT32 */
-extern s3_value_t s3_new_float32(float);
+extern s3_value_t s3_value_float32(float);
 /* Returns a newly allocated s3_value_t of type FLOAT64 */
-extern s3_value_t s3_new_float64(double);
+extern s3_value_t s3_value_float64(double);
 /* Returns a newly allocated s3_value_t of type STRING */
-extern s3_value_t s3_new_string(char*);
+extern s3_value_t s3_value_string(char*);
 /* Returns a newly allocated s3_value_t of type CHARACTER */
-extern s3_value_t s3_new_char(char);
+extern s3_value_t s3_value_char(char);
 /* Returns a newly allocated s3_value_t of type POINTER */
-extern s3_value_t s3_new_pointer(void*);
+extern s3_value_t s3_value_pointer(void*);
 /* Returns a newly allocated s3_value_t of type POINTER */
-extern s3_value_t s3_new_none(void);
+extern s3_value_t s3_value_none(void);
 
 /* When in use, a global struct named value_factory will be available. */
 #define CREATE_VALUE_T_FACTORY_AS(NAME)\
@@ -115,14 +115,14 @@ extern s3_value_t s3_new_none(void);
         s3_value_t (*from_pointer) (void*);\
         s3_value_t (*from_none) (void);\
     } NAME = {\
-        .from_int=&s3_new_int,\
-        .from_uint=&s3_new_uint,\
-        .from_float32=&s3_new_float32,\
-        .from_float64=&s3_new_float64,\
-        .from_string=&s3_new_string,\
-        .from_char=&s3_new_char,\
-        .from_pointer=&s3_new_pointer,\
-        .from_none=&s3_new_none,\
+        .from_int=&s3_value_int,\
+        .from_uint=&s3_value_uint,\
+        .from_float32=&s3_value_float32,\
+        .from_float64=&s3_value_float64,\
+        .from_string=&s3_value_string,\
+        .from_char=&s3_value_char,\
+        .from_pointer=&s3_value_pointer,\
+        .from_none=&s3_value_none,\
     };
 
 /* Maximum size of the string representation of the s3_value_t. */
