@@ -1,3 +1,5 @@
 .vscode/
 *.o
-example0*
+*.out
+*.so
+./example0*
