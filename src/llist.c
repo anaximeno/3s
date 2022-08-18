@@ -99,7 +99,7 @@ extern void s3_list_append_front(s3_list_t* list, s3_value_t value)
 
 
 /* Returns the index of a value in the list.
- * If the value was not found the constant `VALUE_NOT_FOUND` is
+ * If the value was not found the constant `S3_VALUE_NOT_FOUND` is
  * returned instead.
  * */
 extern int s3_list_get_first_index(s3_list_t* list, s3_value_t value)
@@ -108,10 +108,10 @@ extern int s3_list_get_first_index(s3_list_t* list, s3_value_t value)
     unsigned idx = 0;
 
     for (node = list->head, idx = 0 ; node != NULL ; node = node->next, ++idx)
-        if (node->value == value)
+        if (s3_value_compare(node->value, value) == S3_VALUE_EQUAL)
             return idx;
 
-    return VALUE_NOT_FOUND;
+    return S3_VALUE_NOT_FOUND;
 }
 
 
@@ -221,12 +221,12 @@ extern void s3_list_remove_at_index(s3_list_t* list, unsigned index)
 /* Completely removes the value from the list. */
 extern void s3_list_remove_value(s3_list_t* list, s3_value_t value)
 {
-    int index = VALUE_NOT_FOUND;
-    while ((index = s3_list_get_first_index(list, value)) != VALUE_NOT_FOUND) {
+    int index = S3_VALUE_NOT_FOUND;
+    while ((index = s3_list_get_first_index(list, value)) != S3_VALUE_NOT_FOUND) {
         s3_list_remove_at_index(list, (unsigned) index);
     }
 #ifdef _MAKE_ROBUST_CHECK
-    assert(s3_list_get_first_index(list, value) == VALUE_NOT_FOUND);
+    assert(s3_list_get_first_index(list, value) == S3_VALUE_NOT_FOUND);
 #endif
 }
 

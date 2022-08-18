@@ -29,6 +29,8 @@
 #include <stdlib.h>
 #include <string.h>
 
+/* Returned when searching for values on lists. */
+#define S3_VALUE_NOT_FOUND -1
 
 typedef struct s3_list_t s3_list_t;
 
@@ -73,7 +75,7 @@ extern void s3_list_append_back(s3_list_t* list, s3_value_t value);
 extern void s3_list_append_front(s3_list_t* list, s3_value_t value);
 
 /* Returns the index of a value in the list.
- * If the value was not found the constant `VALUE_NOT_FOUND` is
+ * If the value was not found the constant `S3_VALUE_NOT_FOUND` is
  * returned instead.
  * */
 extern int s3_list_get_first_index(s3_list_t* list, s3_value_t value);
