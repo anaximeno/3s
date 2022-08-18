@@ -6,7 +6,7 @@
 #include <assert.h>
 
 /* This was implemented to reduce duplication and improve reuse. */
-#define WRAP_AROUND(STATEMENTS) ({\
+#define WRAP_AROUND(STATEMENTS) {\
     s3_value_t value_wrapper = (s3_value_t) malloc(sizeof(struct s3_value_t));\
     if (value_wrapper != NULL) {\
         value_wrapper->repr = &s3_value_repr;\
@@ -14,48 +14,31 @@
         STATEMENTS\
     }\
     return value_wrapper;\
-})
-
+}
 
 extern s3_value_t s3_value_int(int32_t value)
-{
-    WRAP_AROUND(value_wrapper->data.integer = value; value_wrapper->type = INTEGER;);
-}
+WRAP_AROUND(value_wrapper->data.integer = value; value_wrapper->type = INTEGER;)
 
 extern s3_value_t s3_value_uint(uint32_t value)
-{
-    WRAP_AROUND(value_wrapper->data.uinteger = value; value_wrapper->type = UNSIGNED;);
-}
+WRAP_AROUND(value_wrapper->data.uinteger = value; value_wrapper->type = UNSIGNED;)
 
 extern s3_value_t s3_value_float32(float value)
-{
-    WRAP_AROUND(value_wrapper->data.float32 = value; value_wrapper->type = FLOAT32;);
-}
+WRAP_AROUND(value_wrapper->data.float32 = value; value_wrapper->type = FLOAT32;)
 
 extern s3_value_t s3_value_float64(double value)
-{
-    WRAP_AROUND(value_wrapper->data.float64 = value; value_wrapper->type = FLOAT64;);
-}
+WRAP_AROUND(value_wrapper->data.float64 = value; value_wrapper->type = FLOAT64;)
 
 extern s3_value_t s3_value_string(char* value)
-{
-    WRAP_AROUND(value_wrapper->data.string = value; value_wrapper->type = STRING;);
-}
+WRAP_AROUND(value_wrapper->data.string = value; value_wrapper->type = STRING;)
 
 extern s3_value_t s3_value_char(char value)
-{
-    WRAP_AROUND(value_wrapper->data.character = value; value_wrapper->type = CHARACTER;);
-}
+WRAP_AROUND(value_wrapper->data.character = value; value_wrapper->type = CHARACTER;)
 
 extern s3_value_t s3_value_pointer(void* value)
-{
-    WRAP_AROUND(value_wrapper->data.pointer = value; value_wrapper->type = POINTER;);
-}
+WRAP_AROUND(value_wrapper->data.pointer = value; value_wrapper->type = POINTER;)
 
 extern s3_value_t s3_value_none()
-{
-    WRAP_AROUND(value_wrapper->type = NONE;);
-}
+WRAP_AROUND(value_wrapper->type = NONE;);
 
 extern char* s3_value_repr(s3_value_t value)
 {
@@ -69,19 +52,12 @@ extern char* s3_value_repr(s3_value_t value)
     switch (value->type)
     {
     case INTEGER: _("%d", value->data.integer);
-
     case UNSIGNED: _("%u", value->data.uinteger);
-
     case FLOAT32: _("%f", value->data.float32);
-
     case FLOAT64: _("%lf", value->data.float64);
-
     case STRING: _("'%s'", value->data.string);
-
     case CHARACTER: _("'%c'", value->data.character);
-
     case POINTER: _("&{%p}", value->data.pointer);
-
     case NONE: _("%s", "NONE_TYPE");
 
     default:
@@ -118,29 +94,22 @@ extern int s3_value_compare(s3_value_t value1, s3_value_t value2)
         {
         case INTEGER:
             return COMPARE(value1->data.integer, value2->data.integer);
-
         case UNSIGNED:
             return COMPARE(value1->data.uinteger, value2->data.uinteger);
-
         case FLOAT32:
             return COMPARE(value1->data.float32, value2->data.float32);
-
         case FLOAT64:
             return COMPARE(value1->data.float64, value2->data.float64);
-
         case CHARACTER:
             return COMPARE(value1->data.character, value2->data.character);
-
         case POINTER:
             return COMPARE(value1->data.pointer, value2->data.pointer);
-
         case STRING:
             int comp = strcmp(value1->data.string, value2->data.string);
-#ifdef _MAKE_ROBUST_CHECK
+            #ifdef _MAKE_ROBUST_CHECK
             assert(comp == S3_VALUE_LESS || comp == S3_VALUE_GREATER || comp == S3_VALUE_EQUAL);
-#endif
+            #endif
             return comp;
-
         case NONE:
             return S3_VALUE_EQUAL;
 
