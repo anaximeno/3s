@@ -1,20 +1,24 @@
-.PHONE = test
+.PHONY : examples
 
 CC = gcc
 CFLAGS = -Wall -fPIC -g
 
-3S_LIBS = src/btree.c src/core.c src/llist.c
-3S_OBJS = btree.o core.o llist.o
+3S_LIBS = src/btree.c src/core.c src/llist.c src/stack.c
+3S_OBJS = btree.o core.o llist.o stack.o
 
-test: $(3S_OBJS) test.o
-	$(CC) $(CFLAGS) $^ -o $@
-	@echo Execute using ./test
+EXAMPLES_BIN = example01
 
-test.o: test.c
+examples: $(EXAMPLES_BIN)
+
+example01.o: examples/example01.c
 	$(CC) $(CFLAGS) $^ -c
+
+example01: $(3S_OBJS) example01.o
+	$(CC) $(CFLAGS) $^ -o $@
+	@echo Execute using ./$@
 
 $(3S_OBJS): $(3S_LIBS)
 	$(CC) $(CFLAGS) $^ -c
 
 clean:
-	rm test *.o
+	rm $(EXAMPLES_BIN) *.o
