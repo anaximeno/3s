@@ -204,6 +204,7 @@ extern void s3_list_remove_at_index(s3_list_t* list, unsigned index)
             node->next = NULL;
             node->prev = NULL;
 
+            free(node->value);
             free(node);
 
             node = NULL;
