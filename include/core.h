@@ -27,13 +27,6 @@
 
 #include <stdint.h>
 
-/* Returned when searching for
- * values on lists or arrays.
- * This is defined on the
- * core module.
- * */
-#define S3_VALUE_NOT_FOUND -1
-
 /* Returned if the first value is less than the second one. */
 #define S3_VALUE_LESS -1
 /* Returned if the first value is equal to the second one. */
@@ -42,7 +35,6 @@
 #define S3_VALUE_GREATER 1
 /* Returned if the first value is of different type of the second one. */
 #define S3_VALUE_DIFFERENT -2022
-
 
 
 /* When defined the program will
