@@ -32,7 +32,18 @@
  * This is defined on the
  * core module.
  * */
-#define VALUE_NOT_FOUND -1
+#define S3_VALUE_NOT_FOUND -1
+
+/* Returned if the first value is less than the second one. */
+#define S3_VALUE_LESS -1
+/* Returned if the first value is equal to the second one. */
+#define S3_VALUE_EQUAL 0
+/* Returned if the first value is greater than the second one. */
+#define S3_VALUE_GREATER 1
+/* Returned if the first value is of different type of the second one. */
+#define S3_VALUE_DIFFERENT -2022
+
+
 
 /* When defined the program will
  * run the assertions stated in some
@@ -130,5 +141,10 @@ extern char* s3_value_repr(s3_value_t value);
 
 /* Prints the value to the stdout. */
 extern void s3_value_display(s3_value_t value);
+
+/* Compares two values and returns 0 if they are equal, 1 if value1 > value2,
+ * and -1 if value2 > value1.
+ * */
+extern int s3_value_compare(s3_value_t value1, s3_value_t value2);
 
 #endif /* _3S_CORE_HEADER */

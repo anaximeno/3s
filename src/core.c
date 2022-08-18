@@ -3,6 +3,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <stdio.h>
+#include <assert.h>
 
 /* This was implemented to reduce duplication and improve reuse. */
 #define WRAP_AROUND(STATEMENTS) ({\
@@ -81,9 +82,11 @@ extern char* s3_value_repr(s3_value_t value)
 
     case POINTER: _("&{%p}", value->data.pointer);
 
-    case NONE:
+    case NONE: _("%s", "NONE_TYPE");
+
     default:
         // TODO: handle here. Exit gracefully?
+        exit(EXIT_FAILURE);
         break;
     }
 
@@ -98,4 +101,54 @@ extern void s3_value_display(s3_value_t value)
     char* repr = s3_value_repr(value);
     printf("%s", repr);
     free(repr);
+}
+
+/* Compares two values and returns 0 if they are equal, 1 if value1 > value2,
+ * and -1 if value2 > value1.
+ * */
+extern int s3_value_compare(s3_value_t value1, s3_value_t value2)
+{
+#define COMPARE(a, b)\
+    ((S3_VALUE_LESS * (a < b)) +\
+    (S3_VALUE_EQUAL * (a == b)) +\
+    (S3_VALUE_GREATER * (a > b)))
+
+    if (value1->type == value2->type) {
+        switch (value1->type)
+        {
+        case INTEGER:
+            return COMPARE(value1->data.integer, value2->data.integer);
+
+        case UNSIGNED:
+            return COMPARE(value1->data.uinteger, value2->data.uinteger);
+
+        case FLOAT32:
+            return COMPARE(value1->data.float32, value2->data.float32);
+
+        case FLOAT64:
+            return COMPARE(value1->data.float64, value2->data.float64);
+
+        case CHARACTER:
+            return COMPARE(value1->data.character, value2->data.character);
+
+        case POINTER:
+            return COMPARE(value1->data.pointer, value2->data.pointer);
+
+        case STRING:
+            int comp = strcmp(value1->data.string, value2->data.string);
+#ifdef _MAKE_ROBUST_CHECK
+            assert(comp == S3_VALUE_LESS || comp == S3_VALUE_GREATER || S3_VALUE_EQUAL);
+#endif
+            return comp;
+
+        case NONE:
+            return S3_VALUE_EQUAL;
+
+        default:
+            // TODO: handle here. Exit gracefully?
+            exit(EXIT_FAILURE);
+            break;
+        }
+    } else
+        return S3_VALUE_DIFFERENT;
 }
