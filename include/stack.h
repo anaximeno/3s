@@ -38,6 +38,25 @@ struct s3_stack_t {
     void (*display) (s3_stack_t* self);
 };
 
+/* Adds a new item to the top of the stack. */
+extern int s3_stack_push(s3_stack_t* stack, s3_value_t value);
+
+/* Returns the item in the top of the stack, removing it from the stack.
+ * If no values are found in the stack, then it returns NULL by default.
+ * */
+extern s3_value_t s3_stack_pop(s3_stack_t* stack);
+
+/* Returns the length of the stack, which represents how
+ * many items are in the stack.
+ * */
+extern size_t s3_stack_length(s3_stack_t* stack);
+
+/* Returns a string representing the items in the stack. */
+extern char* s3_stack_repr(s3_stack_t* stack);
+
+/* Prints the stack representation to the stdout. */
+extern void s3_stack_display(s3_stack_t* self);
+
 /* Creates and returns a new stack. */
 extern s3_stack_t* s3_new_stack();
 

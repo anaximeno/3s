@@ -7,7 +7,8 @@
 #include "assert.h"
 
 
-static int push_value_to_stack(s3_stack_t* stack, s3_value_t value)
+/* Adds a new item to the top of the stack. */
+extern int s3_stack_push(s3_stack_t* stack, s3_value_t value)
 {
     if (stack != NULL) {
         /* Try to create a new list, if not created previously. */
@@ -35,7 +36,10 @@ static int push_value_to_stack(s3_stack_t* stack, s3_value_t value)
 }
 
 
-static s3_value_t pop_value_from_stack(s3_stack_t* stack)
+/* Returns the item in the top of the stack, removing it from the stack.
+ * If no values are found in the stack, then it returns NULL by default.
+ * */
+extern s3_value_t s3_stack_pop(s3_stack_t* stack)
 {
     if (stack != NULL) {
         if (stack->list != NULL && stack->list->length > 0) {
@@ -55,7 +59,10 @@ static s3_value_t pop_value_from_stack(s3_stack_t* stack)
 }
 
 
-static size_t length_of_stack(s3_stack_t* stack)
+/* Returns the length of the stack, which represents how
+ * many items are in the stack.
+ * */
+extern size_t s3_stack_length(s3_stack_t* stack)
 {
     if (stack != NULL)
         return stack->size;
@@ -63,13 +70,15 @@ static size_t length_of_stack(s3_stack_t* stack)
 }
 
 
-static char* stack_repr(s3_stack_t* stack)
+/* Returns a string representing the items in the stack. */
+extern char* s3_stack_repr(s3_stack_t* stack)
 __LIST_REPR_ALGORITHM(stack->list, "$[", "]>", "|", FORWARD)
 
 
-static void stack_display(s3_stack_t* self)
+/* Prints the stack representation to the stdout. */
+extern void s3_stack_display(s3_stack_t* self)
 {
-    char* repr = stack_repr(self);
+    char* repr = s3_stack_repr(self);
     printf("%s", repr);
     free(repr);
 }
@@ -80,15 +89,16 @@ extern s3_stack_t* s3_new_stack()
     s3_stack_t* stack = (s3_stack_t*) malloc(sizeof(s3_stack_t));
 
     if (stack != NULL) {
-        stack->top = EMPTY_STACK_TOP;
         stack->size = 0;
+        stack->top = EMPTY_STACK_TOP;
         stack->list = s3_new_list();
 
-        stack->push = &push_value_to_stack;
-        stack->pop = &pop_value_from_stack;
-        stack->length = &length_of_stack;
-        stack->repr = &stack_repr;
-        stack->display = &stack_display;
+        /* Associated functions. */
+        stack->push = &s3_stack_push;
+        stack->pop = &s3_stack_pop;
+        stack->length = &s3_stack_length;
+        stack->repr = &s3_stack_repr;
+        stack->display = &s3_stack_display;
     }
 
     return stack;
