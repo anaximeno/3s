@@ -2,4 +2,5 @@
 *.o
 *.out
 *.so
-./example0*
+example0*
+!examples/*.c
