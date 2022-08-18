@@ -38,6 +38,7 @@
     #error "Unsupported system!"
 #endif
 
+#define ANIMATE 1
 #define SLEEP_MILISECONDS 1000
 
 int main(int argc, char* argv[])
@@ -55,8 +56,10 @@ int main(int argc, char* argv[])
     putchar('\n');
 
     for (int i = 0 ; i < 5 ; ++i) {
+        #if ANIMATE
         SLEEP(SLEEP_MILISECONDS);
         CLEAR_TERM;
+        #endif
 
         value = values[i];
         value_repr = value->repr(value);
@@ -71,8 +74,10 @@ int main(int argc, char* argv[])
     }
 
     while ((value = stack->pop(stack)) != NULL) {
+        #if ANIMATE
         SLEEP(SLEEP_MILISECONDS);
         CLEAR_TERM;
+        #endif
 
         value_repr = value->repr(value);
 
