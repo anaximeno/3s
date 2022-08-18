@@ -43,7 +43,12 @@ extern s3_value_t s3_stack_pop(s3_stack_t* stack)
 {
     if (stack != NULL) {
         if (stack->list != NULL && stack->list->length > 0) {
-            s3_value_t value = stack->list->get(stack->list, stack->top);
+            s3_value_t popped = stack->list->get(stack->list, stack->top);
+            s3_value_t value = (s3_value_t) malloc(sizeof(struct s3_value_t));
+
+            /* Copy bytes from the value popped to the one that will be returned. */
+            memcpy(value, popped, sizeof(struct s3_value_t));
+
             stack->list->remove_at_index(stack->list, stack->top);
             stack->size -= 1;
             stack->top -= 1;
