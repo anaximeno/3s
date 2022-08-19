@@ -29,43 +29,72 @@
 #include <stdlib.h>
 #include <stdbool.h>
 
+/* This is returned when a value could not be added to the tree. */
 #define S3_TREE_VALUE_NOT_ADDED -1
 
+/* Represents the relative position of a tree node. */
 typedef enum s3_tree_node_pos {
     LEFT, RIGTH, ROOT
 } s3_tree_node_pos;
 
 
+/* Represents what should be done when one value is inserted
+ * more than once inside a tree.
+ * */
 typedef enum s3_tree_on_repeated {
     APPEND_LEFT,
     APPEND_RIGHT,
     IGNORE
 } s3_tree_on_repeated;
 
+/* Represents the order in which this tree should be printed. */
 typedef enum s3_tree_printing_order {
     IN_ORDER, PRE_ORDER, POST_ORDER
 } s3_tree_printing_order;
-
 
 typedef struct s3_tree_t s3_tree_t;
 
 /* Represents a unique node of the binary tree. */
 struct s3_tree_node {
+    /* The parent node. */
     struct s3_tree_node* parent;
+    /* The left node. */
     struct s3_tree_node* left;
+    /* The right node. */
     struct s3_tree_node* right;
+    /* The relative position of this node in
+     * relation with its parent node. This can
+     * have the values: LEFT, RIGTH, and ROOT
+     * */
     s3_tree_node_pos position;
+    /* The value stored in this node. */
     s3_value_t value;
+    /* The depth of this node. It begins on zero,
+     * on the root node, and then is incremented accordingly
+     * to the parent's depth.
+     * */
     size_t depth;
 };
 
-//TODO: (do-)comment the fields of the tree
 /* Represents the binary tree as a whole. */
 struct s3_tree_t {
+    /* Represents the root node of this tree. */
     struct s3_tree_node* root;
+    /* This will hold another tree if necessary. In case of adding values
+     * of different types than the one in the root node, the value will be
+     * stored on a side tree.
+     * */
     s3_tree_t* next;
+    /* Anotates what should be the default procedure when inserting a value
+     * more than once. It can be: APPEND_LEFT, APPEND_RIGHT, and IGNORE.
+     * */
     s3_tree_on_repeated on_repeated;
+    /* This is the full depth of this tree. It stores the depth of the most deep node.
+     * */
     size_t full_depth;
+    /* Represents the type of value that is being stored in this particular instance
+     * of this structure.
+     * */
     s3_value_types type_of_value;
 
     /* Adds a new value to the binary tree. If the value was added successfully
