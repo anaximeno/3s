@@ -13,7 +13,7 @@ extern int s3_queue_enqueue(s3_queue_t* queue, s3_value_t value)
     if (queue != NULL) {
         /* Try to create a new list, if not created previously. */
         if (queue->list == NULL) {
-            /* Be aware that the function call below could still return NULL,
+            /* Be aware that the function s3_new_list could still return NULL,
              * if there's no available space.
              * */
             queue->list = s3_new_list();
