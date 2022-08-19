@@ -1,6 +1,6 @@
-#include "../include/core.h"
-#include "../include/queue.h"
-#include "../include/llist.h"
+#include "../include/3s/core.h"
+#include "../include/3s/queue.h"
+#include "../include/3s/llist.h"
 
 #include "stdlib.h"
 #include "stdio.h"

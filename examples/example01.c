@@ -21,7 +21,7 @@
  * SOFTWARE.
  * */
 
-#include "../include/3s.h"
+#include "../include/3s/3s.h"
 
 #include <stdio.h>
 #include <stdlib.h>

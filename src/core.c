@@ -1,4 +1,4 @@
-#include "../include/core.h"
+#include "../include/3s/core.h"
 
 #include <stdlib.h>
 #include <string.h>
