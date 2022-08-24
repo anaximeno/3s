@@ -2,6 +2,7 @@
 
 #include <stdlib.h>
 #include <string.h>
+#include <stdint.h>
 #include <stdio.h>
 #include <assert.h>
 
@@ -69,11 +70,7 @@ extern char* s3_value_repr(s3_value_t value)
     case CHARACTER: _("'%c'", value->data.character);
     case POINTER: _("&{%p}", value->data.pointer);
     case NONE: _("%s", "NONE");
-
-    default:
-        // TODO: handle here. Exit gracefully?
-        exit(EXIT_FAILURE);
-        break;
+    default: _("%s", "UNDEFINED");
     }
 
     /* Reallocates the size of the buffer to only use the space needed. */
@@ -89,40 +86,137 @@ extern void s3_value_display(s3_value_t value)
     free(repr);
 }
 
+/* Compares an double precision floating point value with a value_t value. */
+extern int
+s3_value_compare_float64_and_value_t(const double value1, const s3_value_t value2)
+{
+#define COMPARE(V) COMPARE_V(value1, V)
+    switch (value2->type) {
+        case INTEGER:
+            return COMPARE(value2->data.integer);
+        case UNSIGNED:
+            return COMPARE(value2->data.uinteger);
+        case FLOAT32:
+            return COMPARE(value2->data.float32);
+        case FLOAT64:
+            return COMPARE(value2->data.float64);
+        case CHARACTER:
+        case STRING:
+        case POINTER:
+        case NONE:
+        default:
+            return S3_VALUE_DIFFERENT;
+    }
+}
+
+/* Compares an simple precision value with a value_t value. */
+extern int
+s3_value_compare_float32_and_value_t(const float value1, const s3_value_t value2)
+{
+    return s3_value_compare_float64_and_value_t((double) value1, value2);
+}
+
+/* Compares an unsigned integer with a value_t value. */
+extern int
+s3_value_compare_uint_and_value_t(const uint32_t value1, const s3_value_t value2)
+{
+    return s3_value_compare_float64_and_value_t((double) value1, value2);
+}
+
+/* Compares an integer with a value_t value. */
+extern int
+s3_value_compare_int_and_value_t(const int32_t value1, const s3_value_t value2)
+{
+    return s3_value_compare_float64_and_value_t((double) value1, value2);
+}
+
+/* Compares an char value with a value_t value. */
+extern int
+s3_value_compare_char_and_value_t(const char value1, const s3_value_t value2)
+{
+#define COMPARE(V) COMPARE_V(value1, V)
+    switch (value2->type) {
+        case CHARACTER:
+            return COMPARE(value2->data.character);
+        case STRING:
+            if (strlen(value2->data.string) > 0)
+                return COMPARE(*value2->data.string);
+            return value1 == '\0' ? S3_VALUE_EQUAL : S3_VALUE_GREATER;
+        case INTEGER:
+        case UNSIGNED:
+        case FLOAT32:
+        case FLOAT64:
+        case POINTER:
+        case NONE:
+        default:
+            return S3_VALUE_DIFFERENT;
+    }
+}
+
+/* Compares an string value with a value_t value. */
+extern int
+s3_value_compare_string_and_value_t(char* value1, const s3_value_t value2)
+{
+    int _v = 0;
+    switch (value2->type) {
+        case CHARACTER:
+            if (strlen(value1) == 0)
+                return COMPARE_V(*value1, value2->data.character);
+            return value2->data.character == '\0' ? S3_VALUE_EQUAL : S3_VALUE_LESS;
+        case STRING:
+            _v = strcmp(value1, value2->data.string);
+
+            #ifdef _MAKE_ROBUST_CHECK
+            assert(_v == S3_VALUE_LESS || _v == S3_VALUE_EQUAL || _v == S3_VALUE_GREATER);
+            #endif
+
+            return _v;
+        case INTEGER:
+        case UNSIGNED:
+        case FLOAT32:
+        case FLOAT64:
+        case POINTER:
+        case NONE:
+        default:
+            return S3_VALUE_DIFFERENT;
+    }
+}
+
+/* Compares an pointer value with a value_t value. */
+extern int
+s3_value_compare_pointer_and_value_t(void* value1, const s3_value_t value2)
+{
+    if (value2->type == POINTER)
+        return COMPARE_V(value1, value2->data.pointer);
+    return S3_VALUE_DIFFERENT;
+}
+
 /* Compares two values and returns 0 if they are equal, 1 if value1 > value2,
  * and -1 if value2 > value1.
  * */
 extern int s3_value_compare(s3_value_t value1, s3_value_t value2)
 {
-    if (value1->type == value2->type) {
-        switch (value1->type)
-        {
-        case INTEGER:
-            return COMPARE_V(value1->data.integer, value2->data.integer);
-        case UNSIGNED:
-            return COMPARE_V(value1->data.uinteger, value2->data.uinteger);
-        case FLOAT32:
-            return COMPARE_V(value1->data.float32, value2->data.float32);
-        case FLOAT64:
-            return COMPARE_V(value1->data.float64, value2->data.float64);
-        case CHARACTER:
-            return COMPARE_V(value1->data.character, value2->data.character);
-        case POINTER:
-            return COMPARE_V(value1->data.pointer, value2->data.pointer);
-        case STRING:
-            int comp = strcmp(value1->data.string, value2->data.string);
-            #ifdef _MAKE_ROBUST_CHECK
-            assert(comp == S3_VALUE_LESS || comp == S3_VALUE_GREATER || comp == S3_VALUE_EQUAL);
-            #endif
-            return comp;
-        case NONE:
+    switch (value1->type)
+    {
+    case INTEGER:
+        return s3_value_compare_int_and_value_t(value1->data.integer, value2);
+    case UNSIGNED:
+        return s3_value_compare_uint_and_value_t(value1->data.uinteger, value2);
+    case FLOAT32:
+        return s3_value_compare_float32_and_value_t(value1->data.float32, value2);
+    case FLOAT64:
+        return s3_value_compare_float64_and_value_t(value1->data.float64, value2);
+    case CHARACTER:
+        return s3_value_compare_char_and_value_t(value1->data.character, value2);
+    case STRING:
+        return s3_value_compare_string_and_value_t(value1->data.string, value2);
+    case POINTER:
+        return s3_value_compare_pointer_and_value_t(value1->data.pointer, value2);
+    case NONE:
+        if (value2->type == NONE)
             return S3_VALUE_EQUAL;
-
-        default:
-            // TODO: handle here. Exit gracefully?
-            exit(EXIT_FAILURE);
-            break;
-        }
-    } else
+        /* Return default value else. */
+    default:
         return S3_VALUE_DIFFERENT;
+    }
 }
