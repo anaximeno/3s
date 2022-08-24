@@ -91,7 +91,8 @@ extern int
 s3_value_compare_float64_and_value_t(const double value1, const s3_value_t value2)
 {
 #define COMPARE(V) COMPARE_V(value1, V)
-    switch (value2->type) {
+    switch (value2->type)
+    {
         case INTEGER:
             return COMPARE(value2->data.integer);
         case UNSIGNED:
@@ -157,28 +158,35 @@ s3_value_compare_char_and_value_t(const char value1, const s3_value_t value2)
 extern int
 s3_value_compare_string_and_value_t(char* value1, const s3_value_t value2)
 {
-    int _v = 0;
-    switch (value2->type) {
-        case CHARACTER:
-            if (strlen(value1) == 0)
-                return COMPARE_V(*value1, value2->data.character);
+    if (value2->type == CHARACTER) {
+        if (strlen(value1) == 0) {
+            //empty string
             return value2->data.character == '\0' ? S3_VALUE_EQUAL : S3_VALUE_LESS;
-        case STRING:
-            _v = strcmp(value1, value2->data.string);
+        } else if (strlen(value1) == 1) {
+            // the string as just one character, then compare the characters
+            return COMPARE_V(*value1, value2->data.character);
+        } else { // strlen(value1) > 0
+            // in this case, if the first character is equal as the character value
+            // of value2, then the character value will be considered the lesser, and
+            // the string as the greater.
+            const int cmp = COMPARE_V(*value1, value2->data.character);
+            return cmp == 0 ? S3_VALUE_GREATER : cmp;
+        }
+    } else if (value2->type == STRING) {
+        const int cmp = strcmp(value1, value2->data.string);
 
-            #ifdef _MAKE_ROBUST_CHECK
-            assert(_v == S3_VALUE_LESS || _v == S3_VALUE_EQUAL || _v == S3_VALUE_GREATER);
-            #endif
+#ifdef _MAKE_ROBUST_CHECK
+        assert(
+            cmp == S3_VALUE_LESS ||
+            cmp == S3_VALUE_EQUAL ||
+            cmp == S3_VALUE_GREATER
+        );
+#endif
 
-            return _v;
-        case INTEGER:
-        case UNSIGNED:
-        case FLOAT32:
-        case FLOAT64:
-        case POINTER:
-        case NONE:
-        default:
-            return S3_VALUE_DIFFERENT;
+        return cmp;
+    } else {
+        /* Values can't be compared. */
+        return S3_VALUE_DIFFERENT;
     }
 }
 
