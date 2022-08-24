@@ -74,9 +74,8 @@ extern char* s3_value_repr(s3_value_t value)
     }
 
     /* Reallocates the size of the buffer to only use the space needed. */
-    buffer = realloc(buffer, strlen(buffer) + 1);
-
-    return buffer;
+    char* repr = realloc(buffer, strlen(buffer) + 1);
+    return repr;
 }
 
 extern void s3_value_display(s3_value_t value)
@@ -91,6 +90,7 @@ extern int
 s3_value_compare_float64_and_value_t(const double value1, const s3_value_t value2)
 {
 #define COMPARE(V) COMPARE_V(value1, V)
+
     switch (value2->type)
     {
         case INTEGER:
@@ -136,21 +136,26 @@ extern int
 s3_value_compare_char_and_value_t(const char value1, const s3_value_t value2)
 {
 #define COMPARE(V) COMPARE_V(value1, V)
-    switch (value2->type) {
-        case CHARACTER:
-            return COMPARE(value2->data.character);
-        case STRING:
-            if (strlen(value2->data.string) > 0)
-                return COMPARE(*value2->data.string);
+
+    if (value2->type == CHARACTER) {
+        return COMPARE(value2->data.character);
+    } else if (value2->type == STRING) {
+        const char* _value2 = value2->data.string;
+
+        if (strlen(_value2) == 0) {
             return value1 == '\0' ? S3_VALUE_EQUAL : S3_VALUE_GREATER;
-        case INTEGER:
-        case UNSIGNED:
-        case FLOAT32:
-        case FLOAT64:
-        case POINTER:
-        case NONE:
-        default:
-            return S3_VALUE_DIFFERENT;
+        } else if (strlen(_value2) == 1) {
+            // the string as just one character, then compare the characters
+            return COMPARE(*_value2);
+        } else { // strlen(_value2) > 0
+            // in this case, if the first character is equal as the character value
+            // of value2, then the character value will be considered the lesser, and
+            // the string as the greater.
+            const int cmp = COMPARE(*_value2);
+            return cmp == 0 ? S3_VALUE_LESS : cmp;
+        }
+    } else {
+        return S3_VALUE_DIFFERENT;
     }
 }
 
