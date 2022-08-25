@@ -226,9 +226,8 @@ extern int s3_value_compare(s3_value_t value1, s3_value_t value2)
     case POINTER:
         return s3_value_compare_pointer_and_value_t(value1->data.pointer, value2);
     case NONE:
-        if (value2->type == NONE)
-            return S3_VALUE_EQUAL;
-        /* Return default value else. */
+        if (value2->type == NONE) return S3_VALUE_EQUAL;
+        /* Else return default value below. */
     default:
         return S3_VALUE_DIFFERENT;
     }
