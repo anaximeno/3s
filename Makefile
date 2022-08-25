@@ -1,7 +1,7 @@
-.PHONY : examples
+.PHONY : examples test
 
 CC = gcc
-CFLAGS = -Wall -fPIC -g
+CFLAGS = -Wall -fPIC -g -Wextra
 
 3S_LIBS = src/core.c src/llist.c src/stack.c src/queue.c
 3S_OBJS = core.o llist.o stack.o queue.o
@@ -33,6 +33,15 @@ example03: $(3S_OBJS) example03.o
 
 $(3S_OBJS): $(3S_LIBS)
 	$(CC) $(CFLAGS) $^ -c
+
+test: test_value_t
+
+test_value_t: $(3S_OBJS) tests/test_value_t.c
+	-@$(CC) $(CFLAGS) tests/test_value_t.c -c
+	-@$(CC) $(CFLAGS) $(3S_OBJS) test_value_t.o -o $@
+	-@echo "Running test 'test_value_t'"
+	-@echo -n "|__ Result: " && ./$@
+	-@rm $@
 
 clean:
 	rm $(EXAMPLES_BIN) *.o
