@@ -6,7 +6,7 @@
 void test_value_int_creation(void)
 {
     s3_value_t value = s3_value_int(9);
-    ASSERT_EQ(value->data.integer, (int32_t) 8);
+    ASSERT_EQ(value->data.integer, (int32_t) 9);
     ASSERT_EQ(value->type, INTEGER);
 }
 
