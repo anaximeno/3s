@@ -52,7 +52,14 @@
 /* Convenient assertion methods */
 /* TODO: Generate readable error messages for assert_equals or assert_str_equals */
 #define ASSERT_EQUALS(expected, actual) ASSERT((#actual), (expected) == (actual))
+#define ASSERT_NOT_EQUALS(expected, actual) ASSERT((#actual), (expected) != (actual))
 #define ASSERT_STRING_EQUALS(expected, actual) ASSERT((#actual), strcmp((expected),(actual)) == 0)
+#define ASSERT_STRING_NOT_EQUALS(expected, actual) ASSERT((#actual), strcmp((expected),(actual)) != 0)
+
+#define ASSERT_EQ(expected, actual) ASSERT_EQUALS((expected), (actual))
+#define ASSERT_NE(expected, actual) ASSERT_NOT_EQUALS((expected), (actual))
+#define ASSERT_STR_EQ(expected, actual) ASSERT_STRING_EQUALS((expected), (actual))
+#define ASSERT_STR_NE(expected, actual) ASSERT_STRING_EQUALS((expected), (actual))
 
 /* Run a test() function */
 #define RUN(test_function) tt_execute((#test_function), (test_function))
