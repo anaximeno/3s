@@ -8,6 +8,8 @@ CFLAGS = -Wall -fPIC -g
 
 EXAMPLES_BIN = example01 example02 example03
 
+default: examples
+
 examples: $(EXAMPLES_BIN)
 
 example01.o: examples/example01.c
@@ -34,7 +36,7 @@ example03: $(3S_OBJS) example03.o
 $(3S_OBJS): $(3S_LIBS)
 	$(CC) $(CFLAGS) $^ -c
 
-test: clean_objects test_value_t
+test: test_value_t
 
 test_value_t: $(3S_OBJS) tests/test_value_t.c
 	-@$(CC) $(CFLAGS) tests/test_value_t.c -c
@@ -44,13 +46,5 @@ test_value_t: $(3S_OBJS) tests/test_value_t.c
 	-@echo -n "|__ Result: " && ./$@
 	-@rm $@
 
-clean_objects: _blanket
-	-@echo -n "Cleaning objects... "
-	-@rm *.o
-	-@echo "Done!"
-
-_blanket:
-	-@touch blanket.tmp.o
-
-clean: clean_objects
-	rm $(EXAMPLES_BIN)
+clean:
+	rm *.o $(EXAMPLES_BIN)
