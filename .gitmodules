@@ -1,3 +1,0 @@
-[submodule "include/tinytest"]
-	path = include/tinytest
-	url = https://github.com/anaximeno/tinytest
