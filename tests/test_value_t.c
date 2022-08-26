@@ -3,6 +3,8 @@
 
 #include <stdint.h>
 
+// -- Testing value creation
+
 void test_value_int_creation(void)
 {
     s3_value_t value = s3_value_int(9);
@@ -58,6 +60,14 @@ void test_value_none_creation(void)
     ASSERT_EQ(value->type, NONE);
 }
 
+// -- Testing representation
+
+void test_value_int_repr(void)
+{
+    s3_value_t value = s3_value_int(3);
+    ASSERT_STR_EQ(value->repr(value), "3");
+}
+
 int main()
 {
     RUN(test_value_int_creation);
@@ -68,5 +78,6 @@ int main()
     RUN(test_value_pointer_creation);
     RUN(test_value_char_creation);
     RUN(test_value_none_creation);
+    RUN(test_value_int_repr);
     return TEST_REPORT();
 }
