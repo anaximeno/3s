@@ -42,7 +42,7 @@
  * parts of the code. This is defined
  * on the core module.
  * */
-#define _MAKE_ROBUST_CHECK
+#define _MAKE_ROBUST_CHECK 1
 
 /* The types of values allowed inside the s3_value_t wrapper. */
 typedef enum s3_value_types {
@@ -84,6 +84,9 @@ typedef struct s3_value_t {
      * a new line at the end of the value being printed.
      * */
     void (*display) (struct s3_value_t*);
+
+    /* Compare the self value with a the other given. */
+    int (*compare) (struct s3_value_t*, struct s3_value_t*);
 }* s3_value_t;
 
 /* Returns a newly allocated s3_value_t of type INTEGER */

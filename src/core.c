@@ -47,6 +47,7 @@
     if (wrapper != NULL) {\
         wrapper->repr = &s3_value_repr;\
         wrapper->display = &s3_value_display;\
+        wrapper->compare = &s3_value_compare;\
         STATEMENTS\
     }\
     return wrapper;\
