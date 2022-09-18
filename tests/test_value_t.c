@@ -68,6 +68,77 @@ void test_value_int_repr(void)
     ASSERT_STR_EQ(value->repr(value), "3");
 }
 
+// -- Testing comparation
+
+void test_value_int_comparation(void)
+{
+    s3_value_t value1 = s3_value_int(3);
+
+    ASSERT_EQ(S3_VALUE_GREATER, value1->compare(value1, s3_value_uint(1)));
+    ASSERT_EQ(S3_VALUE_LESS, value1->compare(value1, s3_value_float32(3.4)));
+    ASSERT_EQ(S3_VALUE_EQUAL, value1->compare(value1, s3_value_float64(3.0)));
+    ASSERT_EQ(S3_VALUE_DIFFERENT, value1->compare(value1, s3_value_string("test")));
+    ASSERT_EQ(S3_VALUE_DIFFERENT, value1->compare(value1, s3_value_char('x')));
+    ASSERT_EQ(S3_VALUE_DIFFERENT, value1->compare(value1, s3_value_pointer(0)));
+}
+
+void test_value_uint_comparation(void)
+{
+    s3_value_t value1 = s3_value_uint(3);
+
+    ASSERT_EQ(S3_VALUE_GREATER, value1->compare(value1, s3_value_float32(1)));
+    ASSERT_EQ(S3_VALUE_LESS, value1->compare(value1, s3_value_float64(4)));
+    ASSERT_EQ(S3_VALUE_EQUAL, value1->compare(value1, s3_value_int(3)));
+    ASSERT_EQ(S3_VALUE_DIFFERENT, value1->compare(value1, s3_value_string("test")));
+    ASSERT_EQ(S3_VALUE_DIFFERENT, value1->compare(value1, s3_value_char('x')));
+    ASSERT_EQ(S3_VALUE_DIFFERENT, value1->compare(value1, s3_value_pointer(0)));
+}
+
+void test_value_float32_comparation(void)
+{
+    s3_value_t value1 = s3_value_float32(3.0);
+
+    ASSERT_EQ(S3_VALUE_GREATER, value1->compare(value1, s3_value_float64(1)));
+    ASSERT_EQ(S3_VALUE_LESS, value1->compare(value1, s3_value_uint(4)));
+    ASSERT_EQ(S3_VALUE_EQUAL, value1->compare(value1, s3_value_int(3)));
+    ASSERT_EQ(S3_VALUE_DIFFERENT, value1->compare(value1, s3_value_string("test")));
+    ASSERT_EQ(S3_VALUE_DIFFERENT, value1->compare(value1, s3_value_char('x')));
+    ASSERT_EQ(S3_VALUE_DIFFERENT, value1->compare(value1, s3_value_pointer(0)));
+}
+
+void test_value_float64_comparation(void)
+{
+    s3_value_t value1 = s3_value_float64(3.0);
+
+    ASSERT_EQ(S3_VALUE_GREATER, value1->compare(value1, s3_value_float32(1)));
+    ASSERT_EQ(S3_VALUE_LESS, value1->compare(value1, s3_value_uint(4)));
+    ASSERT_EQ(S3_VALUE_EQUAL, value1->compare(value1, s3_value_int(3)));
+    ASSERT_EQ(S3_VALUE_DIFFERENT, value1->compare(value1, s3_value_string("test")));
+    ASSERT_EQ(S3_VALUE_DIFFERENT, value1->compare(value1, s3_value_char('x')));
+    ASSERT_EQ(S3_VALUE_DIFFERENT, value1->compare(value1, s3_value_pointer(0)));
+}
+
+void test_value_string_comparation(void)
+{
+    s3_value_t value1 = s3_value_string("Test String");
+
+    ASSERT_EQ(S3_VALUE_GREATER, value1->compare(value1, s3_value_char('a')));
+    ASSERT_EQ(S3_VALUE_EQUAL, value1->compare(value1, s3_value_string("Test String")));
+    ASSERT_EQ(S3_VALUE_LESS, value1->compare(value1, s3_value_char('z')));
+    ASSERT_EQ(S3_VALUE_DIFFERENT, value1->compare(value1, s3_value_pointer(0)));
+    ASSERT_EQ(S3_VALUE_DIFFERENT, value1->compare(value1, s3_value_float32(1)));
+    ASSERT_EQ(S3_VALUE_DIFFERENT, value1->compare(value1, s3_value_uint(4)));
+    ASSERT_EQ(S3_VALUE_DIFFERENT, value1->compare(value1, s3_value_int(3)));
+}
+
+
+
+// s3_value_t value2 = s3_value_uint(1);
+// s3_value_t value3 = s3_value_float32(3.4);
+// s3_value_t value4 = s3_value_float64(0.55233);
+// s3_value_t value5 = s3_value_string("test");
+// s3_value_t value6 = s3_value_char('x');
+
 int main()
 {
     RUN(test_value_int_creation);
@@ -78,6 +149,13 @@ int main()
     RUN(test_value_pointer_creation);
     RUN(test_value_char_creation);
     RUN(test_value_none_creation);
+
     RUN(test_value_int_repr);
+
+    RUN(test_value_int_comparation);
+    RUN(test_value_uint_comparation);
+    RUN(test_value_float32_comparation);
+    RUN(test_value_float64_comparation);
+    RUN(test_value_string_comparation);
     return TEST_REPORT();
 }
