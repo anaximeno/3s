@@ -32,66 +32,67 @@
 
 typedef struct s3_queue_t s3_queue_t;
 
-struct s3_queue_t {
+struct s3_queue_t
+{
     /* The size of the queue. */
     unsigned size;
 
     /* The list were values will be stored into. */
-    s3_list_t* list;
+    s3_list_t *list;
 
     /* Adds a new item to the back of the queue. */
-    int (*enqueue) (s3_queue_t* self, s3_value_t value);
+    int (*enqueue)(s3_queue_t *self, s3_value_t value);
 
     /* Returns the item in the front of the queue, removing it from the queue.
      * If no values are found in the queue, then it returns NULL by default.
      * */
-    s3_value_t (*dequeue) (s3_queue_t* self);
+    s3_value_t (*dequeue)(s3_queue_t *self);
 
     /* Returns the item in the front of the queue, without removing it from the queue.
      * If no values are found in the queue, then it returns NULL by default.
      * */
-    s3_value_t (*peek) (s3_queue_t* self);
+    s3_value_t (*peek)(s3_queue_t *self);
 
     /* Returns the length of the queue, which represents how
      * many items are in the queue.
      * */
-    size_t (*length) (s3_queue_t* self);
+    size_t (*length)(s3_queue_t *self);
 
     /* Returns a string representing the items in the queue. */
-    char* (*repr) (s3_queue_t* self);
+    char *(*repr)(s3_queue_t *self);
 
     /* Prints the queue representation to the stdout. */
-    void (*display) (s3_queue_t* self);
+    void (*display)(s3_queue_t *self);
 };
 
 /* Adds a new item to the back of the queue. */
-extern int s3_queue_enqueue(s3_queue_t* queue, s3_value_t value);
+extern int s3_queue_enqueue(s3_queue_t *queue, s3_value_t value);
 
 /* Returns the item in the front of the queue, removing it from the queue.
  * If no values are found in the queue, then it returns NULL by default.
  * */
-extern s3_value_t s3_queue_dequeue(s3_queue_t* queue);
+extern s3_value_t s3_queue_dequeue(s3_queue_t *queue);
 
 /* Returns the item in the front of the queue, without removing it from the queue.
  * If no values are found in the queue, then it returns NULL by default.
  * */
-extern s3_value_t s3_queue_peek(s3_queue_t* queue);
+extern s3_value_t s3_queue_peek(s3_queue_t *queue);
 
 /* Returns the length of the queue, which represents how
  * many items are in the queue.
  * */
-extern size_t s3_queue_length(s3_queue_t* queue);
+extern size_t s3_queue_length(s3_queue_t *queue);
 
 /* Returns a string representing the items in the queue. */
-extern char* s3_queue_repr(s3_queue_t* queue);
+extern char *s3_queue_repr(s3_queue_t *queue);
 
 /* Prints the queue representation to the stdout. */
-extern void s3_queue_display(s3_queue_t* self);
+extern void s3_queue_display(s3_queue_t *self);
 
 /* Creates and returns a new queue. */
-extern s3_queue_t* s3_new_queue();
+extern s3_queue_t *s3_new_queue();
 
 /* Deallocates the memory used in the queue. */
-extern void s3_queue_free(s3_queue_t** queue);
+extern void s3_queue_free(s3_queue_t **queue);
 
 #endif
