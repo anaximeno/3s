@@ -43,6 +43,9 @@
  * */
 #define _MAKE_ROBUST_CHECK 1
 
+/* Maximum size of the string representation of the ts_generic_t. */
+#define TS_MAX_REPR_STR_BUF_SIZE 30
+
 /* The types of values allowed inside the ts_generic_t wrapper. */
 typedef enum ts_types
 {
@@ -135,9 +138,6 @@ extern ts_generic_t ts_none(void);
         .from_pointer = &ts_pointer,          \
         .from_none = &ts_none,                \
     };
-
-/* Maximum size of the string representation of the ts_generic_t. */
-#define __VALUE_T_REPR_BUFFER_MAX_SIZE 30
 
 /* Converts the value to its repr, returning the value stored into the given buffer. */
 extern char *ts_repr(ts_generic_t value);

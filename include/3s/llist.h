@@ -115,24 +115,24 @@ extern void ts_list_display(ts_list_t *list);
  * @param SEP - the string that is in between each item shown.
  * @param PRINT_STRATEGY - The strategy of the list printing algorithm. Must be FORWARD or BACKWARD.
  */
-#define TS_LIST_REPR_ALGORITHM(LIST, PREFIX, POSTFIX, SEP, PRINT_STRATEGY)           \
-    {                                                                                \
-        const unsigned pfx = strlen(PREFIX);                                         \
-        const unsigned llength = (LIST) != NULL ? LIST->length : 0;                  \
-        const unsigned spsize = llength > 0 ? strlen(SEP) * (llength - 1) : 0;       \
-        const size_t size = llength * __VALUE_T_REPR_BUFFER_MAX_SIZE + pfx + spsize; \
-                                                                                     \
-        char *repr = (char *)calloc(size, sizeof(char));                             \
-                                                                                     \
-        if (repr != NULL)                                                            \
-        {                                                                            \
-            strcat(repr, (PREFIX));                                                  \
-            TS_PRINT_LIST_##PRINT_STRATEGY(LIST, SEP);                               \
-            strcat(repr, POSTFIX);                                                   \
-            repr = realloc(repr, strlen(repr) + 1);                                  \
-        }                                                                            \
-                                                                                     \
-        return repr;                                                                 \
+#define TS_LIST_REPR_ALGORITHM(LIST, PREFIX, POSTFIX, SEP, PRINT_STRATEGY)     \
+    {                                                                          \
+        const unsigned pfx = strlen(PREFIX);                                   \
+        const unsigned llength = (LIST) != NULL ? LIST->length : 0;            \
+        const unsigned spsize = llength > 0 ? strlen(SEP) * (llength - 1) : 0; \
+        const size_t size = llength * TS_MAX_REPR_STR_BUF_SIZE + pfx + spsize; \
+                                                                               \
+        char *repr = (char *)calloc(size, sizeof(char));                       \
+                                                                               \
+        if (repr != NULL)                                                      \
+        {                                                                      \
+            strcat(repr, (PREFIX));                                            \
+            TS_PRINT_LIST_##PRINT_STRATEGY(LIST, SEP);                         \
+            strcat(repr, POSTFIX);                                             \
+            repr = realloc(repr, strlen(repr) + 1);                            \
+        }                                                                      \
+                                                                               \
+        return repr;                                                           \
     }
 
 #define TS_PRINT_LIST_FORWARD(LIST, SEP)                   \
