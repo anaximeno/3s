@@ -120,10 +120,10 @@ void test_value_float64_comparation(void)
 
 void test_value_string_comparation(void)
 {
-    s3_value_t value1 = s3_value_string("Test String");
+    s3_value_t value1 = s3_value_string("test string");
 
     ASSERT_EQ(S3_VALUE_GREATER, value1->compare(value1, s3_value_char('a')));
-    ASSERT_EQ(S3_VALUE_EQUAL, value1->compare(value1, s3_value_string("Test String")));
+    ASSERT_EQ(S3_VALUE_EQUAL, value1->compare(value1, s3_value_string("test string")));
     ASSERT_EQ(S3_VALUE_LESS, value1->compare(value1, s3_value_char('z')));
     ASSERT_EQ(S3_VALUE_DIFFERENT, value1->compare(value1, s3_value_pointer(0)));
     ASSERT_EQ(S3_VALUE_DIFFERENT, value1->compare(value1, s3_value_float32(1)));
