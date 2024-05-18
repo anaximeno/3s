@@ -31,20 +31,20 @@ int main(int argc, char* argv[])
 {
     ts_list_t* list = ts_new_list();
 
-    list->append_back(list, ts_int(9));
-    list->append_back(list, ts_string("Hello, 3s!"));
-    list->append_back(list, ts_float32(6.5));
-    list->append_back(list, ts_pointer(list));
+    list->append_back(list, ts_new_int(9));
+    list->append_back(list, ts_new_string("Hello, 3s!"));
+    list->append_back(list, ts_new_float32(6.5));
+    list->append_back(list, ts_new_pointer(list));
 
     /* note: appending to the front of the list! */
-    list->append_front(list, ts_float32(6.5));
+    list->append_front(list, ts_new_float32(6.5));
 
     list->display(list);
     putchar('\n');
 
     puts("\nNow removing all occorences of 6.5 on the list.\n");
 
-    ts_generic_t value = ts_float32(6.5);
+    ts_generic_t value = ts_new_float32(6.5);
     list->remove_all(list, value);
     free(value);
 

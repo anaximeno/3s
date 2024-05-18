@@ -45,9 +45,9 @@ int main(int argc, char* argv[])
 {
     ts_stack_t* stack = ts_new_stack();
     ts_generic_t values[5] = {
-        ts_int(12), ts_float64(1.224444551),
-        ts_string("Stack"), ts_uint(0),
-        ts_char('X')
+        ts_new_int(12), ts_new_float64(1.224444551),
+        ts_new_string("Stack"), ts_new_uint(0),
+        ts_new_char('X')
     };
     ts_generic_t value = NULL;
     char* value_repr = NULL;

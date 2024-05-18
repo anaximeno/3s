@@ -34,7 +34,7 @@
  * being one of the three constants: TS_LESS, TS_EQUAL, and
  * TS_GREATER
  * * */
-#define COMPARE_V(a, b)      \
+#define COMPARE_VALUES(a, b) \
     ((TS_LESS * (a < b)) +   \
      (TS_EQUAL * (a == b)) + \
      (TS_GREATER * (a > b)))
@@ -57,43 +57,43 @@
         return wrapped;                                                           \
     }
 
-extern ts_generic_t ts_int(int32_t value) WRAP({
+extern ts_generic_t ts_new_int(int32_t value) WRAP({
     wrapped->data.integer = value;
-    wrapped->type = INTEGER;
+    wrapped->type = TS_TYPE_INTEGER;
 });
 
-extern ts_generic_t ts_uint(uint32_t value) WRAP({
+extern ts_generic_t ts_new_uint(uint32_t value) WRAP({
     wrapped->data.uinteger = value;
-    wrapped->type = UNSIGNED;
+    wrapped->type = TS_TYPE_UNSIGNED;
 });
 
-extern ts_generic_t ts_float32(float value) WRAP({
+extern ts_generic_t ts_new_float32(float value) WRAP({
     wrapped->data.float32 = value;
-    wrapped->type = FLOAT32;
+    wrapped->type = TS_TYPE_FLOAT32;
 });
 
-extern ts_generic_t ts_float64(double value) WRAP({
+extern ts_generic_t ts_new_float64(double value) WRAP({
     wrapped->data.float64 = value;
-    wrapped->type = FLOAT64;
+    wrapped->type = TS_TYPE_FLOAT64;
 });
 
-extern ts_generic_t ts_string(char *value) WRAP({
+extern ts_generic_t ts_new_string(char *value) WRAP({
     wrapped->data.string = value;
-    wrapped->type = STRING;
+    wrapped->type = TS_TYPE_STRING;
 });
 
-extern ts_generic_t ts_char(char value) WRAP({
+extern ts_generic_t ts_new_char(char value) WRAP({
     wrapped->data.character = value;
-    wrapped->type = CHARACTER;
+    wrapped->type = TS_TYPE_CHARACTER;
 });
 
-extern ts_generic_t ts_pointer(void *value) WRAP({
+extern ts_generic_t ts_new_pointer(void *value) WRAP({
     wrapped->data.pointer = value;
-    wrapped->type = POINTER;
+    wrapped->type = TS_TYPE_POINTER;
 });
 
-extern ts_generic_t ts_none(void) WRAP({
-    wrapped->type = NONE;
+extern ts_generic_t ts_new_none(void) WRAP({
+    wrapped->type = TS_TYPE_NONE;
 });
 
 extern char *ts_repr(ts_generic_t value)
@@ -104,29 +104,29 @@ extern char *ts_repr(ts_generic_t value)
     {
         switch (value->type)
         {
-        case INTEGER:
+        case TS_TYPE_INTEGER:
             sprintf(buffer, "%d", value->data.integer);
             break;
-        case UNSIGNED:
+        case TS_TYPE_UNSIGNED:
             sprintf(buffer, "%u", value->data.uinteger);
             break;
-        case FLOAT32:
+        case TS_TYPE_FLOAT32:
             sprintf(buffer, "%f", value->data.float32);
             break;
-        case FLOAT64:
+        case TS_TYPE_FLOAT64:
             sprintf(buffer, "%lf", value->data.float64);
             break;
-        case STRING:
+        case TS_TYPE_STRING:
             sprintf(buffer, "'%s'", value->data.string);
             break;
-        case CHARACTER:
+        case TS_TYPE_CHARACTER:
             sprintf(buffer, "'%c'", value->data.character);
             break;
-        case POINTER:
+        case TS_TYPE_POINTER:
             sprintf(buffer, "&{%p}", value->data.pointer);
             break;
-        case NONE:
-            sprintf(buffer, "%s", "NONE");
+        case TS_TYPE_NONE:
+            sprintf(buffer, "%s", "TS_TYPE_NONE");
             break;
         default:
             sprintf(buffer, "%s", "UNDEFINED");
@@ -151,22 +151,22 @@ extern void ts_display(ts_generic_t value)
 extern int
 ts_compare_float64_and_generic_t(const double value1, const ts_generic_t value2)
 {
-#define COMPARE(V) COMPARE_V(value1, V)
+#define CMP(V) COMPARE_VALUES(value1, V)
 
     switch (value2->type)
     {
-    case INTEGER:
-        return COMPARE(value2->data.integer);
-    case UNSIGNED:
-        return COMPARE(value2->data.uinteger);
-    case FLOAT32:
-        return COMPARE(value2->data.float32);
-    case FLOAT64:
-        return COMPARE(value2->data.float64);
-    case CHARACTER:
-    case STRING:
-    case POINTER:
-    case NONE:
+    case TS_TYPE_INTEGER:
+        return CMP(value2->data.integer);
+    case TS_TYPE_UNSIGNED:
+        return CMP(value2->data.uinteger);
+    case TS_TYPE_FLOAT32:
+        return CMP(value2->data.float32);
+    case TS_TYPE_FLOAT64:
+        return CMP(value2->data.float64);
+    case TS_TYPE_CHARACTER:
+    case TS_TYPE_STRING:
+    case TS_TYPE_POINTER:
+    case TS_TYPE_NONE:
     default:
         return TS_DIFFERENT;
     }
@@ -197,13 +197,13 @@ ts_compare_int_and_generic_t(const int32_t value1, const ts_generic_t value2)
 extern int
 ts_compare_char_and_generic_t(const char value1, const ts_generic_t value2)
 {
-#define COMPARE(V) COMPARE_V(value1, V)
+#define COMPARE(V) COMPARE_VALUES(value1, V)
 
-    if (value2->type == CHARACTER)
+    if (value2->type == TS_TYPE_CHARACTER)
     {
         return COMPARE(value2->data.character);
     }
-    else if (value2->type == STRING)
+    else if (value2->type == TS_TYPE_STRING)
     {
         const char *_value2 = value2->data.string;
 
@@ -235,7 +235,7 @@ ts_compare_char_and_generic_t(const char value1, const ts_generic_t value2)
 extern int
 ts_compare_string_and_generic_t(char *value1, const ts_generic_t value2)
 {
-    if (value2->type == CHARACTER)
+    if (value2->type == TS_TYPE_CHARACTER)
     {
         if (strlen(value1) == 0)
         {
@@ -245,18 +245,18 @@ ts_compare_string_and_generic_t(char *value1, const ts_generic_t value2)
         else if (strlen(value1) == 1)
         {
             // the string as just one character, then compare the characters
-            return COMPARE_V(*value1, value2->data.character);
+            return COMPARE_VALUES(*value1, value2->data.character);
         }
         else
         { // strlen(value1) > 0
             // in this case, if the first character is equal as the character value
             // of value2, then the character value will be considered the lesser, and
             // the string as the greater.
-            const int cmp = COMPARE_V(*value1, value2->data.character);
+            const int cmp = COMPARE_VALUES(*value1, value2->data.character);
             return cmp == 0 ? TS_GREATER : cmp;
         }
     }
-    else if (value2->type == STRING)
+    else if (value2->type == TS_TYPE_STRING)
     {
         const int cmp = strcmp(value1, value2->data.string);
 
@@ -280,8 +280,8 @@ ts_compare_string_and_generic_t(char *value1, const ts_generic_t value2)
 extern int
 ts_compare_pointer_and_generic_t(void *value1, const ts_generic_t value2)
 {
-    if (value2->type == POINTER)
-        return COMPARE_V(value1, value2->data.pointer);
+    if (value2->type == TS_TYPE_POINTER)
+        return COMPARE_VALUES(value1, value2->data.pointer);
     return TS_DIFFERENT;
 }
 
@@ -292,22 +292,22 @@ extern int ts_compare(ts_generic_t value1, ts_generic_t value2)
 {
     switch (value1->type)
     {
-    case INTEGER:
+    case TS_TYPE_INTEGER:
         return ts_compare_int_and_generic_t(value1->data.integer, value2);
-    case UNSIGNED:
+    case TS_TYPE_UNSIGNED:
         return ts_compare_uint_and_generic_t(value1->data.uinteger, value2);
-    case FLOAT32:
+    case TS_TYPE_FLOAT32:
         return ts_compare_float32_and_generic_t(value1->data.float32, value2);
-    case FLOAT64:
+    case TS_TYPE_FLOAT64:
         return ts_compare_float64_and_generic_t(value1->data.float64, value2);
-    case CHARACTER:
+    case TS_TYPE_CHARACTER:
         return ts_compare_char_and_generic_t(value1->data.character, value2);
-    case STRING:
+    case TS_TYPE_STRING:
         return ts_compare_string_and_generic_t(value1->data.string, value2);
-    case POINTER:
+    case TS_TYPE_POINTER:
         return ts_compare_pointer_and_generic_t(value1->data.pointer, value2);
-    case NONE:
-        if (value2->type == NONE)
+    case TS_TYPE_NONE:
+        if (value2->type == TS_TYPE_NONE)
             return TS_EQUAL;
         /* Else return default value below. */
     default:

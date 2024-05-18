@@ -49,14 +49,14 @@
 /* The types of values allowed inside the ts_generic_t wrapper. */
 typedef enum ts_types
 {
-    INTEGER,
-    UNSIGNED,
-    FLOAT32,
-    FLOAT64,
-    STRING,
-    CHARACTER,
-    POINTER,
-    NONE
+    TS_TYPE_INTEGER,
+    TS_TYPE_UNSIGNED,
+    TS_TYPE_FLOAT32,
+    TS_TYPE_FLOAT64,
+    TS_TYPE_STRING,
+    TS_TYPE_CHARACTER,
+    TS_TYPE_POINTER,
+    TS_TYPE_NONE
 } ts_types;
 
 /* Wrapper used to store the actual data inside.
@@ -100,43 +100,46 @@ typedef struct ts_generic_t
 } *ts_generic_t;
 
 /* Returns a newly allocated ts_generic_t of type INTEGER */
-extern ts_generic_t ts_int(int32_t);
+extern ts_generic_t ts_new_int(int32_t);
 /* Returns a newly allocated ts_generic_t of type UNSIGNED */
-extern ts_generic_t ts_uint(uint32_t);
+extern ts_generic_t ts_new_uint(uint32_t);
 /* Returns a newly allocated ts_generic_t of type FLOAT32 */
-extern ts_generic_t ts_float32(float);
+extern ts_generic_t ts_new_float32(float);
 /* Returns a newly allocated ts_generic_t of type FLOAT64 */
-extern ts_generic_t ts_float64(double);
+extern ts_generic_t ts_new_float64(double);
 /* Returns a newly allocated ts_generic_t of type STRING */
-extern ts_generic_t ts_string(char *);
+extern ts_generic_t ts_new_string(char *);
 /* Returns a newly allocated ts_generic_t of type CHARACTER */
-extern ts_generic_t ts_char(char);
+extern ts_generic_t ts_new_char(char);
 /* Returns a newly allocated ts_generic_t of type POINTER */
-extern ts_generic_t ts_pointer(void *);
+extern ts_generic_t ts_new_pointer(void *);
 /* Returns a newly allocated ts_generic_t of type POINTER */
-extern ts_generic_t ts_none(void);
+extern ts_generic_t ts_new_none(void);
+
+/* 3s Generic type value factory. */
+typedef struct ts_generic_t_factory
+{
+    const ts_generic_t (*new_int)(int32_t);
+    const ts_generic_t (*new_uint)(uint32_t);
+    const ts_generic_t (*new_float32)(float);
+    const ts_generic_t (*new_float64)(double);
+    const ts_generic_t (*new_string)(char *);
+    const ts_generic_t (*new_char)(char);
+    const ts_generic_t (*new_pointer)(void *);
+    const ts_generic_t (*new_none)(void);
+} ts_generic_t_factory;
 
 /* When in use, a global struct named value_factory will be available. */
-#define CREATE_VALUE_T_FACTORY_AS(NAME)       \
-    static const struct ts_factory            \
-    {                                         \
-        ts_generic_t (*from_int)(int32_t);    \
-        ts_generic_t (*from_uint)(uint32_t);  \
-        ts_generic_t (*from_float32)(float);  \
-        ts_generic_t (*from_float64)(double); \
-        ts_generic_t (*from_string)(char *);  \
-        ts_generic_t (*from_char)(char);      \
-        ts_generic_t (*from_pointer)(void *); \
-        ts_generic_t (*from_none)(void);      \
-    } NAME = {                                \
-        .from_int = &ts_int,                  \
-        .from_uint = &ts_uint,                \
-        .from_float32 = &ts_float32,          \
-        .from_float64 = &ts_float64,          \
-        .from_string = &ts_string,            \
-        .from_char = &ts_char,                \
-        .from_pointer = &ts_pointer,          \
-        .from_none = &ts_none,                \
+#define TS_NEW_GENERIC_T_FACTORY()      \
+    {                                   \
+        .new_int = &ts_new_int,         \
+        .new_uint = &ts_new_uint,       \
+        .new_float32 = &ts_new_float32, \
+        .new_float64 = &ts_new_float64, \
+        .new_string = &ts_new_string,   \
+        .new_char = &ts_new_char,       \
+        .new_pointer = &ts_new_pointer, \
+        .new_none = &ts_new_none,       \
     };
 
 /* Converts the value to its repr, returning the value stored into the given buffer. */

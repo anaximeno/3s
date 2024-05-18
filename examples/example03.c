@@ -45,9 +45,9 @@ int main(int argc, char* argv[])
 {
     ts_queue_t* queue = ts_new_queue();
     ts_generic_t values[6] = {
-        ts_int(2), ts_float64(224.444551),
-        ts_string("Queue"), ts_uint(80),
-        ts_char('W'), ts_pointer(queue)
+        ts_new_int(2), ts_new_float64(224.444551),
+        ts_new_string("Queue"), ts_new_uint(80),
+        ts_new_char('W'), ts_new_pointer(queue)
     };
     ts_generic_t value = NULL;
     char* value_repr = NULL;
