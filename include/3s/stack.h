@@ -30,9 +30,9 @@
 
 #define EMPTY_STACK_TOP -1
 
-typedef struct s3_stack_t s3_stack_t;
+typedef struct ts_stack_t ts_stack_t;
 
-struct s3_stack_t
+struct ts_stack_t
 {
     /* The top of the stack. */
     int top;
@@ -41,51 +41,51 @@ struct s3_stack_t
     unsigned size;
 
     /* The list were values will be stored into. */
-    s3_list_t *list;
+    ts_list_t *list;
 
     /* Adds a new item to the top of the stack. */
-    int (*push)(s3_stack_t *self, s3_value_t value);
+    int (*push)(ts_stack_t *self, ts_generic_t value);
 
     /* Returns the item in the top of the stack, removing it from the stack.
      * If no values are found in the stack, then it returns NULL by default.
      * */
-    s3_value_t (*pop)(s3_stack_t *self);
+    ts_generic_t (*pop)(ts_stack_t *self);
 
     /* Returns the length of the stack, which represents how
      * many items are in the stack.
      * */
-    size_t (*length)(s3_stack_t *self);
+    size_t (*length)(ts_stack_t *self);
 
     /* Returns a string representing the items in the stack. */
-    char *(*repr)(s3_stack_t *self);
+    char *(*repr)(ts_stack_t *self);
 
     /* Prints the stack representation to the stdout. */
-    void (*display)(s3_stack_t *self);
+    void (*display)(ts_stack_t *self);
 };
 
 /* Adds a new item to the top of the stack. */
-extern int s3_stack_push(s3_stack_t *stack, s3_value_t value);
+extern int ts_stack_push(ts_stack_t *stack, ts_generic_t value);
 
 /* Returns the item in the top of the stack, removing it from the stack.
  * If no values are found in the stack, then it returns NULL by default.
  * */
-extern s3_value_t s3_stack_pop(s3_stack_t *stack);
+extern ts_generic_t ts_stack_pop(ts_stack_t *stack);
 
 /* Returns the length of the stack, which represents how
  * many items are in the stack.
  * */
-extern size_t s3_stack_length(s3_stack_t *stack);
+extern size_t ts_stack_length(ts_stack_t *stack);
 
 /* Returns a string representing the items in the stack. */
-extern char *s3_stack_repr(s3_stack_t *stack);
+extern char *ts_stack_repr(ts_stack_t *stack);
 
 /* Prints the stack representation to the stdout. */
-extern void s3_stack_display(s3_stack_t *self);
+extern void ts_stack_display(ts_stack_t *self);
 
 /* Creates and returns a new stack. */
-extern s3_stack_t *s3_new_stack();
+extern ts_stack_t *ts_new_stack();
 
 /* Deallocates the memory used in the stack. */
-extern void s3_stack_free(s3_stack_t **stack);
+extern void ts_stack_free(ts_stack_t **stack);
 
 #endif

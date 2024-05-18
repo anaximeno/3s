@@ -32,90 +32,90 @@
 #include <math.h>
 
 /* Returned when searching for values on lists. */
-#define S3_VALUE_NOT_FOUND -1
+#define TS_NOT_FOUND -1
 
-typedef struct s3_list_t s3_list_t;
+typedef struct ts_list_t ts_list_t;
 
 /* Represents a unique node of the doubly-linked list. */
-struct s3_linked_node
+struct ts_linked_node
 {
-    struct s3_linked_node *next;
-    struct s3_linked_node *prev;
-    s3_value_t value;
+    struct ts_linked_node *next;
+    struct ts_linked_node *prev;
+    ts_generic_t value;
 };
 
 /* Represents the linked list as a whole. */
-struct s3_list_t
+struct ts_list_t
 {
-    struct s3_linked_node *head;
-    struct s3_linked_node *tail;
+    struct ts_linked_node *head;
+    struct ts_linked_node *tail;
     unsigned length;
 
     /* Add a new value to the front of the list. */
-    void (*append_front)(s3_list_t *self, s3_value_t value);
+    void (*append_front)(ts_list_t *self, ts_generic_t value);
     /* Add a new value to the back of the list. */
-    void (*append_back)(s3_list_t *self, s3_value_t value);
+    void (*append_back)(ts_list_t *self, ts_generic_t value);
     /* Returns the first index of the value on this list. */
-    int (*index)(s3_list_t *self, s3_value_t value);
+    int (*index)(ts_list_t *self, ts_generic_t value);
     /* Returns the value at the given index. Zero will be returned
      * by default for out of bound indexes. */
-    s3_value_t (*get)(s3_list_t *self, unsigned index);
+    ts_generic_t (*get)(ts_list_t *self, unsigned index);
     /* Removed a value at the given index. */
-    void (*remove_at_index)(s3_list_t *self, unsigned index);
+    void (*remove_at_index)(ts_list_t *self, unsigned index);
     /* Removes all occorences of the value on the list. */
-    void (*remove_all)(s3_list_t *self, s3_value_t value);
+    void (*remove_all)(ts_list_t *self, ts_generic_t value);
     /* Prints the list. */
-    void (*display)(s3_list_t *self);
+    void (*display)(ts_list_t *self);
     /* Returns the string representation of this list.*/
-    char *(*repr)(s3_list_t *self);
+    char *(*repr)(ts_list_t *self);
 };
 
 /* Used to add a new value to the back of the linked list. */
-extern void s3_list_append_back(s3_list_t *list, s3_value_t value);
+extern void ts_list_append_back(ts_list_t *list, ts_generic_t value);
 
 /* Used to add a new value to the front of the linked list. */
-extern void s3_list_append_front(s3_list_t *list, s3_value_t value);
+extern void ts_list_append_front(ts_list_t *list, ts_generic_t value);
 
 /* Returns the index of a value in the list.
- * If the value was not found the constant `S3_VALUE_NOT_FOUND` is
+ * If the value was not found the constant `TS_NOT_FOUND` is
  * returned instead.
  * */
-extern int s3_list_get_first_index(s3_list_t *list, s3_value_t value);
+extern int ts_list_get_first_index(ts_list_t *list, ts_generic_t value);
 
 /* Returns the value at the given index. NULL will be returned
  * by default for out of bound indexes.
  * */
-extern s3_value_t s3_list_get_value(s3_list_t *list, unsigned idx);
+extern ts_generic_t ts_list_get_value(ts_list_t *list, unsigned idx);
 
 /* Removes the value at the given index. */
-extern void s3_list_remove_at_index(s3_list_t *list, unsigned index);
+extern void ts_list_remove_at_index(ts_list_t *list, unsigned index);
 
 /* Removes all occorences of the value on the list. */
-extern void s3_list_remove_value(s3_list_t *list, s3_value_t value);
+extern void ts_list_remove_value(ts_list_t *list, ts_generic_t value);
 
 /* Returns a pointer new allocated linked list. */
-extern s3_list_t *s3_new_list(void);
+extern ts_list_t *ts_new_list(void);
 
-/* Used to free the allocated memory of a s3_list_t structure. */
-extern void s3_list_free(s3_list_t **list);
+/* Used to free the allocated memory of a ts_list_t structure. */
+extern void ts_list_free(ts_list_t **list);
 
 /* Returns the string representation of a list. */
-extern char *s3_list_repr(s3_list_t *list);
+extern char *ts_list_repr(ts_list_t *list);
 
 /* Prints a linked list. */
-extern void s3_list_display(s3_list_t *list);
+extern void ts_list_display(ts_list_t *list);
 
 /* Generates a block with the algorithm to create the list representation.
  *
  * @params LIST, PREFIX, POSTFIX, SEP, PRINT_STRATEGY
  *
- * @param LIST - should be a pointer to a s3_list_t structure.
+ * @param LIST - should be a pointer to a ts_list_t structure.
  * @param PREFIX - a string representing the prefix of the list, ususally "["
  * @param POSTFIX - a string representing the postfix of the list, ususally "]"
  * @param SEP - the string that is in between each item shown.
  * @param PRINT_STRATEGY - The strategy of the list printing algorithm. Must be FORWARD or BACKWARD.
  */
-#define S3_LIST_REPR_ALGORITHM(LIST, PREFIX, POSTFIX, SEP, PRINT_STRATEGY)           \
+#define TS_LIST_REPR_ALGORITHM(LIST, PREFIX, POSTFIX, SEP, PRINT_STRATEGY)           \
     {                                                                                \
         const unsigned pfx = strlen(PREFIX);                                         \
         const unsigned llength = (LIST) != NULL ? LIST->length : 0;                  \
@@ -127,7 +127,7 @@ extern void s3_list_display(s3_list_t *list);
         if (repr != NULL)                                                            \
         {                                                                            \
             strcat(repr, (PREFIX));                                                  \
-            S3_PRINT_LIST_##PRINT_STRATEGY(LIST, SEP);                               \
+            TS_PRINT_LIST_##PRINT_STRATEGY(LIST, SEP);                               \
             strcat(repr, POSTFIX);                                                   \
             repr = realloc(repr, strlen(repr) + 1);                                  \
         }                                                                            \
@@ -135,30 +135,30 @@ extern void s3_list_display(s3_list_t *list);
         return repr;                                                                 \
     }
 
-#define S3_PRINT_LIST_FORWARD(LIST, SEP)                 \
-    {                                                    \
-        for (unsigned i = 0; i < llength; ++i)           \
-        {                                                \
-            const s3_value_t value = LIST->get(LIST, i); \
-            char *value_repr = value->repr(value);       \
-            strcat(repr, value_repr);                    \
-            if (i + 1 != llength)                        \
-                strcat(repr, SEP);                       \
-            free(value_repr);                            \
-        }                                                \
+#define TS_PRINT_LIST_FORWARD(LIST, SEP)                   \
+    {                                                      \
+        for (unsigned i = 0; i < llength; ++i)             \
+        {                                                  \
+            const ts_generic_t value = LIST->get(LIST, i); \
+            char *value_repr = value->repr(value);         \
+            strcat(repr, value_repr);                      \
+            if (i + 1 != llength)                          \
+                strcat(repr, SEP);                         \
+            free(value_repr);                              \
+        }                                                  \
     }
 
-#define S3_PRINT_LIST_BACKWARD(LIST, SEP)                    \
-    {                                                        \
-        for (unsigned i = llength; i > 0; --i)               \
-        {                                                    \
-            const s3_value_t value = LIST->get(LIST, i - 1); \
-            char *value_repr = value->repr(value);           \
-            strcat(repr, value_repr);                        \
-            if (i - 1 != 0)                                  \
-                strcat(repr, SEP);                           \
-            free(value_repr);                                \
-        }                                                    \
+#define TS_PRINT_LIST_BACKWARD(LIST, SEP)                      \
+    {                                                          \
+        for (unsigned i = llength; i > 0; --i)                 \
+        {                                                      \
+            const ts_generic_t value = LIST->get(LIST, i - 1); \
+            char *value_repr = value->repr(value);             \
+            strcat(repr, value_repr);                          \
+            if (i - 1 != 0)                                    \
+                strcat(repr, SEP);                             \
+            free(value_repr);                                  \
+        }                                                      \
     }
 
 #endif /* _3S_LINKED_LIST_HEADER */

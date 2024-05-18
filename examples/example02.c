@@ -43,13 +43,13 @@
 
 int main(int argc, char* argv[])
 {
-    s3_stack_t* stack = s3_new_stack();
-    s3_value_t values[5] = {
-        s3_value_int(12), s3_value_float64(1.224444551),
-        s3_value_string("Stack"), s3_value_uint(0),
-        s3_value_char('X')
+    ts_stack_t* stack = ts_new_stack();
+    ts_generic_t values[5] = {
+        ts_int(12), ts_float64(1.224444551),
+        ts_string("Stack"), ts_uint(0),
+        ts_char('X')
     };
-    s3_value_t value = NULL;
+    ts_generic_t value = NULL;
     char* value_repr = NULL;
 
     stack->display(stack);
@@ -90,6 +90,6 @@ int main(int argc, char* argv[])
         free(value_repr);
     }
 
-    s3_stack_free(&stack);
+    ts_stack_free(&stack);
     return EXIT_SUCCESS;
 }

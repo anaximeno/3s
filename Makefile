@@ -36,13 +36,13 @@ example03: $(3S_OBJS) example03.o
 $(3S_OBJS): $(3S_LIBS)
 	$(CC) $(CFLAGS) $^ -c
 
-test: test_value_t
+test: test_generic_values
 
-test_value_t: $(3S_OBJS) tests/test_value_t.c
-	-@$(CC) $(CFLAGS) tests/test_value_t.c -c
-	-@$(CC) $(CFLAGS) $(3S_OBJS) test_value_t.o -o $@
+test_generic_values: $(3S_OBJS) tests/test_generic_values.c
+	-@$(CC) $(CFLAGS) tests/test_generic_values.c -c
+	-@$(CC) $(CFLAGS) $(3S_OBJS) test_generic_values.o -o $@
 	-@echo
-	-@echo "Running tests for 'test_value_t'"
+	-@echo "Running tests for 'test_generic_values'"
 	-@echo -n "|__ Result: " && ./$@
 	-@rm $@
 

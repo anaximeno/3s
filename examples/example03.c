@@ -43,13 +43,13 @@
 
 int main(int argc, char* argv[])
 {
-    s3_queue_t* queue = s3_new_queue();
-    s3_value_t values[6] = {
-        s3_value_int(2), s3_value_float64(224.444551),
-        s3_value_string("Queue"), s3_value_uint(80),
-        s3_value_char('W'), s3_value_pointer(queue)
+    ts_queue_t* queue = ts_new_queue();
+    ts_generic_t values[6] = {
+        ts_int(2), ts_float64(224.444551),
+        ts_string("Queue"), ts_uint(80),
+        ts_char('W'), ts_pointer(queue)
     };
-    s3_value_t value = NULL;
+    ts_generic_t value = NULL;
     char* value_repr = NULL;
 
     queue->display(queue);
@@ -90,6 +90,6 @@ int main(int argc, char* argv[])
         free(value_repr);
     }
 
-    s3_queue_free(&queue);
+    ts_queue_free(&queue);
     return EXIT_SUCCESS;
 }

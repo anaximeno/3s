@@ -31,72 +31,72 @@
 #include <assert.h>
 
 /* Compares two basic values. And returns the result
- * being one of the three constants: S3_VALUE_LESS, S3_VALUE_EQUAL, and
- * S3_VALUE_GREATER
+ * being one of the three constants: TS_LESS, TS_EQUAL, and
+ * TS_GREATER
  * * */
-#define COMPARE_V(a, b)            \
-    ((S3_VALUE_LESS * (a < b)) +   \
-     (S3_VALUE_EQUAL * (a == b)) + \
-     (S3_VALUE_GREATER * (a > b)))
+#define COMPARE_V(a, b)      \
+    ((TS_LESS * (a < b)) +   \
+     (TS_EQUAL * (a == b)) + \
+     (TS_GREATER * (a > b)))
 
 /* Wraps the common processes for initializing and assigning value into a new
- * s3 value type.
+ * ts generic value.
  * */
-#define WRAP(WRAPPINGS)                                                     \
-    {                                                                       \
-        s3_value_t wrapped = (s3_value_t)malloc(sizeof(struct s3_value_t)); \
-                                                                            \
-        if (wrapped != NULL)                                                \
-        {                                                                   \
-            wrapped->repr = &s3_value_repr;                                 \
-            wrapped->display = &s3_value_display;                           \
-            wrapped->compare = &s3_value_compare;                           \
-            WRAPPINGS;                                                      \
-        }                                                                   \
-                                                                            \
-        return wrapped;                                                     \
+#define WRAP(WRAPPINGS)                                                           \
+    {                                                                             \
+        ts_generic_t wrapped = (ts_generic_t)malloc(sizeof(struct ts_generic_t)); \
+                                                                                  \
+        if (wrapped != NULL)                                                      \
+        {                                                                         \
+            wrapped->repr = &ts_repr;                                             \
+            wrapped->display = &ts_display;                                       \
+            wrapped->compare = &ts_compare;                                       \
+            WRAPPINGS;                                                            \
+        }                                                                         \
+                                                                                  \
+        return wrapped;                                                           \
     }
 
-extern s3_value_t s3_value_int(int32_t value) WRAP({
+extern ts_generic_t ts_int(int32_t value) WRAP({
     wrapped->data.integer = value;
     wrapped->type = INTEGER;
 });
 
-extern s3_value_t s3_value_uint(uint32_t value) WRAP({
+extern ts_generic_t ts_uint(uint32_t value) WRAP({
     wrapped->data.uinteger = value;
     wrapped->type = UNSIGNED;
 });
 
-extern s3_value_t s3_value_float32(float value) WRAP({
+extern ts_generic_t ts_float32(float value) WRAP({
     wrapped->data.float32 = value;
     wrapped->type = FLOAT32;
 });
 
-extern s3_value_t s3_value_float64(double value) WRAP({
+extern ts_generic_t ts_float64(double value) WRAP({
     wrapped->data.float64 = value;
     wrapped->type = FLOAT64;
 });
 
-extern s3_value_t s3_value_string(char *value) WRAP({
+extern ts_generic_t ts_string(char *value) WRAP({
     wrapped->data.string = value;
     wrapped->type = STRING;
 });
 
-extern s3_value_t s3_value_char(char value) WRAP({
+extern ts_generic_t ts_char(char value) WRAP({
     wrapped->data.character = value;
     wrapped->type = CHARACTER;
 });
 
-extern s3_value_t s3_value_pointer(void *value) WRAP({
+extern ts_generic_t ts_pointer(void *value) WRAP({
     wrapped->data.pointer = value;
     wrapped->type = POINTER;
 });
 
-extern s3_value_t s3_value_none(void) WRAP({
+extern ts_generic_t ts_none(void) WRAP({
     wrapped->type = NONE;
 });
 
-extern char *s3_value_repr(s3_value_t value)
+extern char *ts_repr(ts_generic_t value)
 {
     char *buffer = (char *)calloc(__VALUE_T_REPR_BUFFER_MAX_SIZE, sizeof(char));
 
@@ -138,16 +138,16 @@ extern char *s3_value_repr(s3_value_t value)
     return realloc(buffer, strlen(buffer) + 1);
 }
 
-extern void s3_value_display(s3_value_t value)
+extern void ts_display(ts_generic_t value)
 {
-    char *repr = s3_value_repr(value);
+    char *repr = ts_repr(value);
     printf("%s", repr);
     free(repr);
 }
 
 /* Compares an double precision floating point value with a value_t value. */
 extern int
-s3_value_compare_float64_and_value_t(const double value1, const s3_value_t value2)
+ts_compare_float64_and_value_t(const double value1, const ts_generic_t value2)
 {
 #define COMPARE(V) COMPARE_V(value1, V)
 
@@ -166,34 +166,34 @@ s3_value_compare_float64_and_value_t(const double value1, const s3_value_t value
     case POINTER:
     case NONE:
     default:
-        return S3_VALUE_DIFFERENT;
+        return TS_DIFFERENT;
     }
 }
 
 /* Compares an simple precision value with a value_t value. */
 extern int
-s3_value_compare_float32_and_value_t(const float value1, const s3_value_t value2)
+ts_compare_float32_and_value_t(const float value1, const ts_generic_t value2)
 {
-    return s3_value_compare_float64_and_value_t((double)value1, value2);
+    return ts_compare_float64_and_value_t((double)value1, value2);
 }
 
 /* Compares an unsigned integer with a value_t value. */
 extern int
-s3_value_compare_uint_and_value_t(const uint32_t value1, const s3_value_t value2)
+ts_compare_uint_and_value_t(const uint32_t value1, const ts_generic_t value2)
 {
-    return s3_value_compare_float64_and_value_t((double)value1, value2);
+    return ts_compare_float64_and_value_t((double)value1, value2);
 }
 
 /* Compares an integer with a value_t value. */
 extern int
-s3_value_compare_int_and_value_t(const int32_t value1, const s3_value_t value2)
+ts_compare_int_and_value_t(const int32_t value1, const ts_generic_t value2)
 {
-    return s3_value_compare_float64_and_value_t((double)value1, value2);
+    return ts_compare_float64_and_value_t((double)value1, value2);
 }
 
 /* Compares an char value with a value_t value. */
 extern int
-s3_value_compare_char_and_value_t(const char value1, const s3_value_t value2)
+ts_compare_char_and_value_t(const char value1, const ts_generic_t value2)
 {
 #define COMPARE(V) COMPARE_V(value1, V)
 
@@ -207,7 +207,7 @@ s3_value_compare_char_and_value_t(const char value1, const s3_value_t value2)
 
         if (strlen(_value2) == 0)
         {
-            return value1 == '\0' ? S3_VALUE_EQUAL : S3_VALUE_GREATER;
+            return value1 == '\0' ? TS_EQUAL : TS_GREATER;
         }
         else if (strlen(_value2) == 1)
         {
@@ -220,25 +220,25 @@ s3_value_compare_char_and_value_t(const char value1, const s3_value_t value2)
             // of value2, then the character value will be considered the lesser, and
             // the string as the greater.
             const int cmp = COMPARE(*_value2);
-            return cmp == 0 ? S3_VALUE_LESS : cmp;
+            return cmp == 0 ? TS_LESS : cmp;
         }
     }
     else
     {
-        return S3_VALUE_DIFFERENT;
+        return TS_DIFFERENT;
     }
 }
 
 /* Compares an string value with a value_t value. */
 extern int
-s3_value_compare_string_and_value_t(char *value1, const s3_value_t value2)
+ts_compare_string_and_value_t(char *value1, const ts_generic_t value2)
 {
     if (value2->type == CHARACTER)
     {
         if (strlen(value1) == 0)
         {
             // empty string
-            return value2->data.character == '\0' ? S3_VALUE_EQUAL : S3_VALUE_LESS;
+            return value2->data.character == '\0' ? TS_EQUAL : TS_LESS;
         }
         else if (strlen(value1) == 1)
         {
@@ -251,7 +251,7 @@ s3_value_compare_string_and_value_t(char *value1, const s3_value_t value2)
             // of value2, then the character value will be considered the lesser, and
             // the string as the greater.
             const int cmp = COMPARE_V(*value1, value2->data.character);
-            return cmp == 0 ? S3_VALUE_GREATER : cmp;
+            return cmp == 0 ? TS_GREATER : cmp;
         }
     }
     else if (value2->type == STRING)
@@ -260,9 +260,9 @@ s3_value_compare_string_and_value_t(char *value1, const s3_value_t value2)
 
 #ifdef _MAKE_ROBUST_CHECK
         assert(
-            cmp == S3_VALUE_LESS ||
-            cmp == S3_VALUE_EQUAL ||
-            cmp == S3_VALUE_GREATER);
+            cmp == TS_LESS ||
+            cmp == TS_EQUAL ||
+            cmp == TS_GREATER);
 #endif
 
         return cmp;
@@ -270,45 +270,45 @@ s3_value_compare_string_and_value_t(char *value1, const s3_value_t value2)
     else
     {
         /* Values can't be compared. */
-        return S3_VALUE_DIFFERENT;
+        return TS_DIFFERENT;
     }
 }
 
 /* Compares an pointer value with a value_t value. */
 extern int
-s3_value_compare_pointer_and_value_t(void *value1, const s3_value_t value2)
+ts_compare_pointer_and_value_t(void *value1, const ts_generic_t value2)
 {
     if (value2->type == POINTER)
         return COMPARE_V(value1, value2->data.pointer);
-    return S3_VALUE_DIFFERENT;
+    return TS_DIFFERENT;
 }
 
 /* Compares two values and returns 0 if they are equal, 1 if value1 > value2,
  * and -1 if value2 > value1.
  * */
-extern int s3_value_compare(s3_value_t value1, s3_value_t value2)
+extern int ts_compare(ts_generic_t value1, ts_generic_t value2)
 {
     switch (value1->type)
     {
     case INTEGER:
-        return s3_value_compare_int_and_value_t(value1->data.integer, value2);
+        return ts_compare_int_and_value_t(value1->data.integer, value2);
     case UNSIGNED:
-        return s3_value_compare_uint_and_value_t(value1->data.uinteger, value2);
+        return ts_compare_uint_and_value_t(value1->data.uinteger, value2);
     case FLOAT32:
-        return s3_value_compare_float32_and_value_t(value1->data.float32, value2);
+        return ts_compare_float32_and_value_t(value1->data.float32, value2);
     case FLOAT64:
-        return s3_value_compare_float64_and_value_t(value1->data.float64, value2);
+        return ts_compare_float64_and_value_t(value1->data.float64, value2);
     case CHARACTER:
-        return s3_value_compare_char_and_value_t(value1->data.character, value2);
+        return ts_compare_char_and_value_t(value1->data.character, value2);
     case STRING:
-        return s3_value_compare_string_and_value_t(value1->data.string, value2);
+        return ts_compare_string_and_value_t(value1->data.string, value2);
     case POINTER:
-        return s3_value_compare_pointer_and_value_t(value1->data.pointer, value2);
+        return ts_compare_pointer_and_value_t(value1->data.pointer, value2);
     case NONE:
         if (value2->type == NONE)
-            return S3_VALUE_EQUAL;
+            return TS_EQUAL;
         /* Else return default value below. */
     default:
-        return S3_VALUE_DIFFERENT;
+        return TS_DIFFERENT;
     }
 }
