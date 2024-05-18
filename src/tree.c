@@ -41,7 +41,7 @@ static ts_tree_node ts_tree_node_new(void)
         node->left = NULL;
         node->right = NULL;
         node->value = NULL;
-        node->position = ROOT;
+        node->position = TS_TREE_NODE_ROOT;
         node->depth = 0;
     }
 
@@ -52,7 +52,7 @@ static int insert_value_in_btree(ts_tree_t *tree, ts_tree_node *root, ts_generic
                                  ts_tree_node_position position, ts_tree_node parent)
 {
 #define DEPTH(PARENT_NODE) (PARENT_NODE != NULL ? PARENT_NODE->depth + 1 : 0)
-#define REP(TREE, STRAT) (TREE.on_repeated == SRAT)
+#define REP(TREE, STRAT) (TREE.on_dup_value_strat == STRAT)
 
     if (*root == NULL)
     {
@@ -75,13 +75,14 @@ static int insert_value_in_btree(ts_tree_t *tree, ts_tree_node *root, ts_generic
     {
         const cmp = ts_compare(value, (*root)->value);
 
-        if (cmp == TS_LESS || (cmp == TS_EQUAL && REP(tree, APPEND_LEFT)))
-            return insert_value_in_btree(tree, &(*root)->left, value, LEFT, *root);
-        else if (cmp == TS_GREATER || (cmp == TS_EQUAL && REP(tree, APPEND_RIGTH)))
-            return insert_value_in_btree(tree, &(*root)->right, value, RIGTH, *root);
+        if (cmp == TS_LESS || (cmp == TS_EQUAL && tree->on_dup_value_strat == TS_TREE_APPEND_LEFT))
+            return insert_value_in_btree(tree, &(*root)->left, value, TS_TREE_NODE_LEFT, *root);
+        else if (cmp == TS_GREATER || (cmp == TS_EQUAL && tree->on_dup_value_strat == TS_TREE_APPEND_RIGHT))
+            return insert_value_in_btree(tree, &(*root)->right, value, TS_TREE_NODE_RIGTH, *root);
         else if (cmp == TS_DIFFERENT)
             return ts_tree_add(tree->next, value); // Add to another tree
-        else                                       /* IGNORE */
+        else
+            // IGNORE
             ;
     }
 
@@ -93,17 +94,17 @@ extern int ts_tree_add(ts_tree_t *tree, ts_generic_t value)
 {
     if (tree->root == NULL && value != NULL)
         tree->type_of_value = value->type;
-    return insert_value_in_btree(tree, &tree->root, value, LEFT, NULL);
+    return insert_value_in_btree(tree, &tree->root, value, TS_TREE_NODE_LEFT, NULL);
 }
 
-extern ts_tree_t *ts_tree_new(ts_tree_on_repeated_enum on_repeated)
+extern ts_tree_t *ts_tree_new(ts_tree_on_dup_value_strategy on_dup_value_strat)
 {
     ts_tree_t *tree = (ts_tree_t *)malloc(sizeof(ts_tree_t));
 
     if (tree != NULL)
     {
         tree->root = NULL;
-        tree->on_repeated = on_repeated;
+        tree->on_dup_value_strat = on_dup_value_strat;
         tree->add = &ts_tree_add;
     }
 

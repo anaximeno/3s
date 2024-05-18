@@ -36,27 +36,27 @@
 /* Represents the relative position of a tree node. */
 typedef enum ts_tree_node_position
 {
-    LEFT = 0x100,
-    ROOT = 0x010,
-    RIGTH = 0x001
+    TS_TREE_NODE_LEFT,
+    TS_TREE_NODE_ROOT,
+    TS_TREE_NODE_RIGTH
 } ts_tree_node_position;
 
 /* Represents what should be done when one value is inserted
  * more than once inside a tree.
  * */
-typedef enum ts_tree_on_repeated
+typedef enum ts_tree_on_dup_value_strategy
 {
-    APPEND_LEFT,
-    APPEND_RIGHT,
-    IGNORE
-} ts_tree_on_repeated_enum;
+    TS_TREE_APPEND_LEFT,
+    TS_TREE_APPEND_RIGHT,
+    TS_TREE_IGNORE
+} ts_tree_on_dup_value_strategy;
 
 /* Represents the order in which this tree should be printed. */
 typedef enum ts_tree_printing_order
 {
-    IN_ORDER,
-    PRE_ORDER,
-    POST_ORDER
+    TS_TREE_IN_ORDER,
+    TS_TREE_PRE_ORDER,
+    TS_TREE_POST_ORDER
 } ts_tree_printing_order;
 
 typedef struct ts_tree_t ts_tree_t;
@@ -97,7 +97,7 @@ struct ts_tree_t
     /* Anotates what should be the default procedure when inserting a value
      * more than once. It can be: APPEND_LEFT, APPEND_RIGHT, and IGNORE.
      * */
-    ts_tree_on_repeated_enum on_repeated;
+    ts_tree_on_dup_value_strategy on_dup_value_strat;
     /* This is the full depth of this tree. It stores the depth of the most deep node.
      * */
     size_t full_depth;
@@ -160,11 +160,11 @@ extern void ts_tree_display(ts_tree_t *tree, ts_tree_printing_order order);
 extern void ts_tree_balance(ts_tree_t *tree);
 
 /* Returns a pointer new allocated binary tree.
- * The parameter on_repeated is used to determine
+ * The parameter on_dup_value_strat is used to determine
  * what to do when a value is added more than once to the
  * tree.
  * */
-extern ts_tree_t *ts_tree_new(ts_tree_on_repeated_enum on_repeated);
+extern ts_tree_t *ts_tree_new(ts_tree_on_dup_value_strategy on_dup_value_strat);
 
 /* Used to free the allocated memory of a binary tree structure. */
 extern void ts_tree_free(ts_tree_t **tree);

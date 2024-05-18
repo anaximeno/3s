@@ -107,15 +107,15 @@ extern void ts_list_display(ts_list_t *list);
 
 /* Generates a block with the algorithm to create the list representation.
  *
- * @params LIST, PREFIX, POSTFIX, SEP, PRINT_STRATEGY
+ * @params LIST, PREFIX, POSTFIX, SEP, STRATEGY
  *
  * @param LIST - should be a pointer to a ts_list_t structure.
  * @param PREFIX - a string representing the prefix of the list, ususally "["
  * @param POSTFIX - a string representing the postfix of the list, ususally "]"
  * @param SEP - the string that is in between each item shown.
- * @param PRINT_STRATEGY - The strategy of the list printing algorithm. Must be FORWARD or BACKWARD.
+ * @param STRATEGY - The strategy of the list printing algorithm. Must be FORWARD or BACKWARD.
  */
-#define TS_LIST_REPR_ALGORITHM(LIST, PREFIX, POSTFIX, SEP, PRINT_STRATEGY)     \
+#define TS_LIST_REPR_ALGORITHM(LIST, PREFIX, POSTFIX, SEP, STRATEGY)           \
     {                                                                          \
         const unsigned pfx = strlen(PREFIX);                                   \
         const unsigned llength = (LIST) != NULL ? LIST->length : 0;            \
@@ -127,7 +127,7 @@ extern void ts_list_display(ts_list_t *list);
         if (repr != NULL)                                                      \
         {                                                                      \
             strcat(repr, (PREFIX));                                            \
-            TS_PRINT_LIST_##PRINT_STRATEGY(LIST, SEP);                         \
+            TS_PRINT_LIST_##STRATEGY(LIST, SEP);                               \
             strcat(repr, POSTFIX);                                             \
             repr = realloc(repr, strlen(repr) + 1);                            \
         }                                                                      \
