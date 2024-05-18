@@ -1,4 +1,4 @@
-#include "../include/tinytest/tinytest.h"
+#include "../tinytest/tinytest.h"
 #include "../include/3s/3s.h"
 
 #include <stdint.h>
