@@ -1,7 +1,7 @@
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
  * MIT License                                                                       *
  *                                                                                   *
- * Copyright (c) 2022 Anaxímeno Brito                                                *
+ * Copyright (c) 2022-2024 Anaxímeno Brito                                           *
  *                                                                                   *
  * Permission is hereby granted, free of charge, to any person obtaining a copy      *
  * of this software and associated documentation files (the "Software"), to deal     *
@@ -146,7 +146,7 @@ extern int ts_list_get_first_index(ts_list_t *list, ts_generic_t value)
     unsigned idx = 0;
 
     for (node = list->head, idx = 0; node != NULL; node = node->next, ++idx)
-        if (ts_compare(node->value, value) == TS_EQUAL)
+        if (ts_generic_t_cmp(node->value, value) == TS_EQUAL)
             return idx;
 
     return TS_NOT_FOUND;

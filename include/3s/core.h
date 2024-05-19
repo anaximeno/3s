@@ -1,7 +1,7 @@
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
  * MIT License                                                                       *
  *                                                                                   *
- * Copyright (c) 2022-2024 Anaxímeno Brito                                                *
+ * Copyright (c) 2022-2024 Anaxímeno Brito                                           *
  *                                                                                   *
  * Permission is hereby granted, free of charge, to any person obtaining a copy      *
  * of this software and associated documentation files (the "Software"), to deal     *
@@ -143,14 +143,14 @@ typedef struct ts_generic_t_factory
     };
 
 /* Converts the value to its repr, returning the value stored into the given buffer. */
-extern char *ts_repr(ts_generic_t value);
+extern char *ts_generic_t_repr(ts_generic_t value);
 
 /* Prints the value to the stdout. */
-extern void ts_display(ts_generic_t value);
+extern void ts_generic_t_display(ts_generic_t value);
 
 /* Compares two values and returns 0 if they are equal, 1 if value1 > value2,
  * and -1 if value2 > value1.
  * */
-extern int ts_compare(ts_generic_t value1, ts_generic_t value2);
+extern int ts_generic_t_cmp(ts_generic_t value1, ts_generic_t value2);
 
 #endif /* _3S_CORE_HEADER */

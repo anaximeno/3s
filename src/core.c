@@ -1,7 +1,7 @@
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
  * MIT License                                                                       *
  *                                                                                   *
- * Copyright (c) 2022 Anaxímeno Brito                                                *
+ * Copyright (c) 2022-2024 Anaxímeno Brito                                           *
  *                                                                                   *
  * Permission is hereby granted, free of charge, to any person obtaining a copy      *
  * of this software and associated documentation files (the "Software"), to deal     *
@@ -34,7 +34,7 @@
  * being one of the three constants: TS_LESS, TS_EQUAL, and
  * TS_GREATER
  * * */
-#define COMPARE_VALUES(a, b) \
+#define CMP(a, b)            \
     ((TS_LESS * (a < b)) +   \
      (TS_EQUAL * (a == b)) + \
      (TS_GREATER * (a > b)))
@@ -48,9 +48,9 @@
                                                                                   \
         if (wrapped != NULL)                                                      \
         {                                                                         \
-            wrapped->repr = &ts_repr;                                             \
-            wrapped->display = &ts_display;                                       \
-            wrapped->compare = &ts_compare;                                       \
+            wrapped->repr = &ts_generic_t_repr;                                   \
+            wrapped->display = &ts_generic_t_display;                             \
+            wrapped->compare = &ts_generic_t_cmp;                                 \
             WRAPPINGS;                                                            \
         }                                                                         \
                                                                                   \
@@ -96,7 +96,7 @@ extern ts_generic_t ts_new_none(void) WRAP({
     wrapped->type = TS_TYPE_NONE;
 });
 
-extern char *ts_repr(ts_generic_t value)
+extern char *ts_generic_t_repr(ts_generic_t value)
 {
     char *buffer = (char *)calloc(TS_MAX_REPR_STR_BUF_SIZE, sizeof(char));
 
@@ -126,10 +126,10 @@ extern char *ts_repr(ts_generic_t value)
             sprintf(buffer, "&{%p}", value->data.pointer);
             break;
         case TS_TYPE_NONE:
-            sprintf(buffer, "%s", "TS_TYPE_NONE");
+            sprintf(buffer, "%s", "NONE");
             break;
         default:
-            sprintf(buffer, "%s", "UNDEFINED");
+            sprintf(buffer, "%s", "UNKNOWN");
             break;
         }
 
@@ -140,29 +140,27 @@ extern char *ts_repr(ts_generic_t value)
     return buffer;
 }
 
-extern void ts_display(ts_generic_t value)
+extern void ts_generic_t_display(ts_generic_t value)
 {
-    char *repr = ts_repr(value);
+    char *repr = ts_generic_t_repr(value);
     printf("%s", repr);
     free(repr);
 }
 
 /* Compares an double precision floating point value with a generic_t value. */
 extern int
-ts_compare_float64_and_generic_t(const double value1, const ts_generic_t value2)
+ts_cmp_float64_and_generic_t(const double value1, const ts_generic_t value2)
 {
-#define CMP(V) COMPARE_VALUES(value1, V)
-
     switch (value2->type)
     {
     case TS_TYPE_INTEGER:
-        return CMP(value2->data.integer);
+        return CMP(value1, value2->data.integer);
     case TS_TYPE_UNSIGNED:
-        return CMP(value2->data.uinteger);
+        return CMP(value1, value2->data.uinteger);
     case TS_TYPE_FLOAT32:
-        return CMP(value2->data.float32);
+        return CMP(value1, value2->data.float32);
     case TS_TYPE_FLOAT64:
-        return CMP(value2->data.float64);
+        return CMP(value1, value2->data.float64);
     case TS_TYPE_CHARACTER:
     case TS_TYPE_STRING:
     case TS_TYPE_POINTER:
@@ -174,34 +172,32 @@ ts_compare_float64_and_generic_t(const double value1, const ts_generic_t value2)
 
 /* Compares an simple precision value with a generic_t value. */
 extern int
-ts_compare_float32_and_generic_t(const float value1, const ts_generic_t value2)
+ts_cmp_float32_and_generic_t(const float value1, const ts_generic_t value2)
 {
-    return ts_compare_float64_and_generic_t((double)value1, value2);
+    return ts_cmp_float64_and_generic_t((double)value1, value2);
 }
 
 /* Compares an unsigned integer with a generic_t value. */
 extern int
-ts_compare_uint_and_generic_t(const uint32_t value1, const ts_generic_t value2)
+ts_cmp_uint_and_generic_t(const uint32_t value1, const ts_generic_t value2)
 {
-    return ts_compare_float64_and_generic_t((double)value1, value2);
+    return ts_cmp_float64_and_generic_t((double)value1, value2);
 }
 
 /* Compares an integer with a generic_t value. */
 extern int
-ts_compare_int_and_generic_t(const int32_t value1, const ts_generic_t value2)
+ts_cmp_int_and_generic_t(const int32_t value1, const ts_generic_t value2)
 {
-    return ts_compare_float64_and_generic_t((double)value1, value2);
+    return ts_cmp_float64_and_generic_t((double)value1, value2);
 }
 
 /* Compares an char value with a generic_t value. */
 extern int
-ts_compare_char_and_generic_t(const char value1, const ts_generic_t value2)
+ts_cmp_char_and_generic_t(const char value1, const ts_generic_t value2)
 {
-#define COMPARE(V) COMPARE_VALUES(value1, V)
-
     if (value2->type == TS_TYPE_CHARACTER)
     {
-        return COMPARE(value2->data.character);
+        return CMP(value1, value2->data.character);
     }
     else if (value2->type == TS_TYPE_STRING)
     {
@@ -214,14 +210,14 @@ ts_compare_char_and_generic_t(const char value1, const ts_generic_t value2)
         else if (strlen(_value2) == 1)
         {
             // the string as just one character, then compare the characters
-            return COMPARE(*_value2);
+            return CMP(value1, *_value2);
         }
         else
         { // strlen(_value2) > 0
             // in this case, if the first character is equal as the character value
             // of value2, then the character value will be considered the lesser, and
             // the string as the greater.
-            const int cmp = COMPARE(*_value2);
+            const int cmp = CMP(value1, *_value2);
             return cmp == 0 ? TS_LESS : cmp;
         }
     }
@@ -233,7 +229,7 @@ ts_compare_char_and_generic_t(const char value1, const ts_generic_t value2)
 
 /* Compares an string value with a generic_t value. */
 extern int
-ts_compare_string_and_generic_t(char *value1, const ts_generic_t value2)
+ts_cmp_string_and_generic_t(char *value1, const ts_generic_t value2)
 {
     if (value2->type == TS_TYPE_CHARACTER)
     {
@@ -245,14 +241,14 @@ ts_compare_string_and_generic_t(char *value1, const ts_generic_t value2)
         else if (strlen(value1) == 1)
         {
             // the string as just one character, then compare the characters
-            return COMPARE_VALUES(*value1, value2->data.character);
+            return CMP(*value1, value2->data.character);
         }
         else
         { // strlen(value1) > 0
             // in this case, if the first character is equal as the character value
             // of value2, then the character value will be considered the lesser, and
             // the string as the greater.
-            const int cmp = COMPARE_VALUES(*value1, value2->data.character);
+            const int cmp = CMP(*value1, value2->data.character);
             return cmp == 0 ? TS_GREATER : cmp;
         }
     }
@@ -278,34 +274,34 @@ ts_compare_string_and_generic_t(char *value1, const ts_generic_t value2)
 
 /* Compares an pointer value with a generic_t value. */
 extern int
-ts_compare_pointer_and_generic_t(void *value1, const ts_generic_t value2)
+ts_cmp_pointer_and_generic_t(void *value1, const ts_generic_t value2)
 {
     if (value2->type == TS_TYPE_POINTER)
-        return COMPARE_VALUES(value1, value2->data.pointer);
+        return CMP(value1, value2->data.pointer);
     return TS_DIFFERENT;
 }
 
 /* Compares two values and returns 0 if they are equal, 1 if value1 > value2,
  * and -1 if value2 > value1.
  * */
-extern int ts_compare(ts_generic_t value1, ts_generic_t value2)
+extern int ts_generic_t_cmp(ts_generic_t value1, ts_generic_t value2)
 {
     switch (value1->type)
     {
     case TS_TYPE_INTEGER:
-        return ts_compare_int_and_generic_t(value1->data.integer, value2);
+        return ts_cmp_int_and_generic_t(value1->data.integer, value2);
     case TS_TYPE_UNSIGNED:
-        return ts_compare_uint_and_generic_t(value1->data.uinteger, value2);
+        return ts_cmp_uint_and_generic_t(value1->data.uinteger, value2);
     case TS_TYPE_FLOAT32:
-        return ts_compare_float32_and_generic_t(value1->data.float32, value2);
+        return ts_cmp_float32_and_generic_t(value1->data.float32, value2);
     case TS_TYPE_FLOAT64:
-        return ts_compare_float64_and_generic_t(value1->data.float64, value2);
+        return ts_cmp_float64_and_generic_t(value1->data.float64, value2);
     case TS_TYPE_CHARACTER:
-        return ts_compare_char_and_generic_t(value1->data.character, value2);
+        return ts_cmp_char_and_generic_t(value1->data.character, value2);
     case TS_TYPE_STRING:
-        return ts_compare_string_and_generic_t(value1->data.string, value2);
+        return ts_cmp_string_and_generic_t(value1->data.string, value2);
     case TS_TYPE_POINTER:
-        return ts_compare_pointer_and_generic_t(value1->data.pointer, value2);
+        return ts_cmp_pointer_and_generic_t(value1->data.pointer, value2);
     case TS_TYPE_NONE:
         if (value2->type == TS_TYPE_NONE)
             return TS_EQUAL;

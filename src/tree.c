@@ -1,7 +1,7 @@
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
  * MIT License                                                                       *
  *                                                                                   *
- * Copyright (c) 2022 Anaxímeno Brito                                                *
+ * Copyright (c) 2022-2024 Anaxímeno Brito                                           *
  *                                                                                   *
  * Permission is hereby granted, free of charge, to any person obtaining a copy      *
  * of this software and associated documentation files (the "Software"), to deal     *
@@ -73,7 +73,7 @@ static int insert_value_in_btree(ts_tree_t *tree, ts_tree_node *root, ts_generic
     }
     else
     {
-        const cmp = ts_compare(value, (*root)->value);
+        const cmp = ts_generic_t_cmp(value, (*root)->value);
 
         if (cmp == TS_LESS || (cmp == TS_EQUAL && tree->on_dup_value_strat == TS_TREE_APPEND_LEFT))
             return insert_value_in_btree(tree, &(*root)->left, value, TS_TREE_NODE_LEFT, *root);
