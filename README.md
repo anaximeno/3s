@@ -7,12 +7,26 @@ The intent is to have data structures that can simultaneously hold more than one
 
 Run the following command to compile the examples:
 
-```bash
+```sh
 make examples
 ```
 
 Then run the numbered tests, for example to run the first test, run:
 
-```bash
+```sh
 ./example01
+```
+
+## How to run unit tests?
+
+First make sure you've also cloned the submodule used for tests, [tinytest](https://github.com/anaximeno/tinytest) inside the root folder of this project, you can do it with the command:
+
+```sh
+git submodule update --init
+```
+
+If everything went ok you can then execute the tests with:
+
+```sh
+make test
 ```

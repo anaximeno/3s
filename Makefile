@@ -1,12 +1,13 @@
 .PHONY : examples test
 
 CC = gcc
-CFLAGS = -Wall -fPIC -g 
+CFLAGS = -Wall -fPIC -g
 
 3S_LIBS = src/core.c src/llist.c src/stack.c src/queue.c
 3S_OBJS = core.o llist.o stack.o queue.o
 
-TINYTEST_PATH = tinytest
+TINYTEST_PATH = ./tinytest
+TINYTEST_SRC = $(TINYTEST_PATH)/tinytest.c
 TINYTEST_OBJ = $(TINYTEST_PATH)/tinytest.o
 
 EXAMPLES_BIN = example01 example02 example03
@@ -39,7 +40,7 @@ example03: $(3S_OBJS) example03.o
 $(3S_OBJS): $(3S_LIBS)
 	$(CC) $(CFLAGS) $^ -c
 
-$(TINYTEST_OBJ): $(TINYTEST_PATH)
+$(TINYTEST_OBJ): $(TINYTEST_SRC)
 	cd $(TINYTEST_PATH) && $(MAKE)
 
 test: test_generic_values
